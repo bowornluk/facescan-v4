@@ -100,9 +100,20 @@
             </div>
 
             <div id="content-attendance" class="hidden space-y-6">
-                <div id="start-scan-section" class="text-center bg-white dark:bg-gray-800 p-8 rounded-lg shadow-md">
-                    <h2 class="text-2xl font-bold mb-4">เริ่มการเช็คชื่อ</h2>
-                    <p class="text-gray-600 dark:text-gray-400 mb-4">กรุณาเลือกรายวิชาที่ต้องการเช็คชื่อ</p>
+                <div id="start-scan-section" class="text-center bg-white dark:bg-gray-800 p-6 sm:p-8 rounded-lg shadow-md max-w-lg mx-auto">
+                    <h2 class="text-2xl font-bold mb-2">เริ่มการเช็คชื่อ</h2>
+                    <p class="text-gray-600 dark:text-gray-400 mb-6">กรุณาเลือกรายวิชาที่ต้องการเช็คชื่อ</p>
+            
+                    <div id="teacher-info-display" class="hidden mb-6 p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg animate-fade-in">
+                        <div class="flex items-center gap-4">
+                            <img id="teacher-info-image" src="" class="w-16 h-16 rounded-full object-cover border-2 border-gray-300 dark:border-gray-500">
+                            <div class="text-left">
+                                <p id="teacher-info-subject" class="font-semibold text-gray-800 dark:text-gray-100"></p>
+                                <p id="teacher-info-name" class="text-sm text-gray-500 dark:text-gray-400"></p>
+                            </div>
+                        </div>
+                    </div>
+            
                     <div class="max-w-xs mx-auto mb-6">
                          <select id="subject-select" class="w-full border rounded-lg p-3 bg-transparent dark:text-gray-200 dark:border-gray-600">
                             <option value="">-- กรุณาเลือกรายวิชา --</option>
@@ -137,7 +148,7 @@
                         </button>
                     </div>
                 </div>
-
+            
                  <div id="absence-management-section" class="hidden bg-white dark:bg-gray-800 p-4 sm:p-6 rounded-lg shadow-md">
                     <h2 class="text-xl font-bold mb-4">สรุปผลการเช็คชื่อ</h2>
                     <p class="text-gray-600 dark:text-gray-400 mb-4">ตรวจสอบสถานะของนักเรียนและกดบันทึกเพื่อยืนยัน</p>
@@ -687,6 +698,7 @@
         // --- ATTENDANCE PROCESS ---
         async function loadSubjectsForDropdown() {
             try {
+                // Fetch subjects if the global variable is empty
                 if (subjects.length === 0) {
                     const response = await apiCall({ action: 'getSubjects' });
                     if (response.success) {
@@ -703,10 +715,30 @@
                         subjectSelect.appendChild(option);
                     });
                 }
+
+                // [UPDATED] Event handler to show teacher info on selection
                 subjectSelect.onchange = () => {
-                    const hasValue = !!subjectSelect.value;
+                    const selectedValue = subjectSelect.value;
+                    const teacherInfoDiv = document.getElementById('teacher-info-display');
+                    const teacherImage = document.getElementById('teacher-info-image');
+                    const teacherSubject = document.getElementById('teacher-info-subject');
+                    const teacherName = document.getElementById('teacher-info-name');
+
+                    const hasValue = !!selectedValue;
                     document.getElementById('start-scan-btn').disabled = !hasValue;
                     document.getElementById('manual-check-btn').disabled = !hasValue;
+
+                    if (hasValue) {
+                        const selectedSubject = subjects.find(s => s.subjectname === selectedValue);
+                        if (selectedSubject) {
+                            teacherImage.src = selectedSubject.teacherimage || 'https://placehold.co/150x150/e2e8f0/475569?text=?';
+                            teacherSubject.innerText = selectedSubject.subjectname;
+                            teacherName.innerText = `สอนโดย: ${selectedSubject.teachername}`;
+                            teacherInfoDiv.classList.remove('hidden');
+                        }
+                    } else {
+                        teacherInfoDiv.classList.add('hidden');
+                    }
                 };
             } catch (error) {
                 console.error('Error loading subjects:', error);
