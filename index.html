@@ -562,7 +562,7 @@
                 }
             }
         }
-
+    
         // --- DASHBOARD ---
         function renderStudentRosterForDashboard() {
             const rosterGrid = document.getElementById('student-roster-grid');
@@ -623,7 +623,7 @@
                 const response = await apiCall({ action: 'getDashboardSummary', data: { date: selectedDate, period: period } });
                 const cardsContainer = document.getElementById('subject-summary-cards-container');
                 cardsContainer.innerHTML = ''; 
-
+    
                 if (response.success && response.data.length > 0) {
                      response.data.forEach(item => {
                         const totalStudents = item.present + item.absentOrLeave;
@@ -637,7 +637,7 @@
                         } else if (totalStudents > 0) {
                             borderColorClass = 'border-red-500';
                         }
-
+    
                         const cardHtml = `
                         <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-200">
                             <img src="${item.teacherImage || 'https://placehold.co/150x150/e2e8f0/475569?text=?'}" 
@@ -645,7 +645,7 @@
                             
                             <h4 class="font-bold text-md text-gray-800 dark:text-gray-100 truncate w-full" title="${item.subject}">${item.subject}</h4>
                             <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">${item.teacherName}</p>
-
+    
                             <div class="flex justify-around w-full mb-3">
                                 <div class="text-green-500">
                                     <i data-lucide="user-check" class="mx-auto w-6 h-6"></i>
@@ -658,7 +658,7 @@
                                     <p class="text-xs">ขาด/ลา</p>
                                 </div>
                             </div>
-
+    
                             <div class="w-full text-left">
                                 <p class="text-xs text-gray-600 dark:text-gray-300 mb-1">คิดเป็น ${attendancePercent.toFixed(1)}%</p>
                                 <div class="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-2">
@@ -1051,12 +1051,12 @@
             };
             reader.readAsDataURL(file);
         }
-
+    
         function openStudentModal(student = null) {
             document.getElementById('student-form').reset();
             document.getElementById('image-preview').src = 'https://placehold.co/400x300/e2e8f0/475569?text=Image';
             document.getElementById('student-image-data').value = '';
-
+    
             if (student) {
                 document.getElementById('modal-title').innerText = 'แก้ไขข้อมูลนักเรียน';
                 document.getElementById('student-row-index').value = student.rowIndex;
@@ -1074,11 +1074,10 @@
             document.getElementById('student-modal').classList.add('hidden');
         }
         
-        // [FIXED] This function no longer clears the students array, fixing the bug.
+        // [FIXED] This function no longer clears the students array.
         async function loadStudentDataForTable() {
             try {
-                // The `students = [];` line that caused the error has been removed.
-                await loadStudentData(); // This will use cached data if available, or fetch if not.
+                await loadStudentData(); // Uses cached data if available, or fetches if not.
                 studentSortOrder = 'desc';
                 sortStudentTable();
             } catch(err) {
@@ -1087,7 +1086,7 @@
                  renderStudentTable();
             }
         }
-
+    
         function renderStudentTable() {
             const tableBody = document.getElementById('student-table-body');
             tableBody.innerHTML = '';
@@ -1108,7 +1107,7 @@
                 deleteButton.className = 'text-red-600 p-1 ml-2 hover:underline';
                 deleteButton.innerHTML = `<i data-lucide="trash-2" class="inline-block w-4 h-4 mr-1"></i>ลบ`;
                 deleteButton.onclick = () => deleteStudent(student.rowIndex);
-
+    
                 actionsCell.appendChild(editButton);
                 actionsCell.appendChild(deleteButton);
                 tableBody.appendChild(row);
@@ -1143,7 +1142,8 @@
                 const response = await apiCall({ action: action, data: studentData });
                 if (response.success) { 
                     closeStudentModal();
-                    await loadStudentDataForTable(); // Use await to ensure data is reloaded
+                    students = []; // Force a full refresh after editing/adding
+                    await loadStudentDataForTable(); 
                 } else { 
                     alert('Error: ' + (response.error || 'Unknown error'));
                 }
@@ -1159,7 +1159,8 @@
                 try {
                      const response = await apiCall({ action: 'deleteStudent', data: { rowIndex } });
                     if (response.success) { 
-                        await loadStudentDataForTable(); // Use await
+                        students = []; // Force a full refresh after deleting
+                        await loadStudentDataForTable(); 
                     } else { 
                         alert('Error: ' + (response.error || 'Unknown error'));
                     }
@@ -1168,12 +1169,12 @@
                 }
             }
         }
-
+    
         function openSubjectModal(subject = null) {
             document.getElementById('subject-form').reset();
             document.getElementById('image-preview-subject').src = 'https://placehold.co/400x300/e2e8f0/475569?text=Image';
             document.getElementById('subject-image-data').value = '';
-
+    
             if (subject) {
                 document.getElementById('modal-title-subject').innerText = 'แก้ไขข้อมูลรายวิชา';
                 document.getElementById('subject-row-index').value = subject.rowIndex;
@@ -1188,11 +1189,11 @@
             }
             document.getElementById('subject-modal').classList.remove('hidden');
         }
-
+    
         function closeSubjectModal() {
             document.getElementById('subject-modal').classList.add('hidden');
         }
-
+    
         async function loadSubjectsForTable() {
             try {
                 subjects = []; 
@@ -1235,14 +1236,14 @@
                 deleteButton.className = 'text-red-600 p-1 ml-2 hover:underline';
                 deleteButton.innerHTML = `<i data-lucide="trash-2" class="inline-block w-4 h-4 mr-1"></i>ลบ`;
                 deleteButton.onclick = () => deleteSubject(subject.rowIndex);
-
+    
                 actionsCell.appendChild(editButton);
                 actionsCell.appendChild(deleteButton);
                 tableBody.appendChild(row);
             });
             lucide.createIcons();
         }
-
+    
         async function handleSubjectFormSubmit(event) {
             event.preventDefault();
             const submitBtn = document.getElementById('form-submit-btn-subject');
@@ -1272,7 +1273,7 @@
                 submitBtn.innerText = 'บันทึก';
             }
         }
-
+    
         async function deleteSubject(rowIndex) {
             if (confirm('คุณแน่ใจหรือไม่ว่าต้องการลบข้อมูลรายวิชานี้?')) {
                 try {
@@ -1287,7 +1288,7 @@
                 }
             }
         }
-
+    
         // --- REPORTS ---
         async function loadSubjectsForFilters() {
             if (subjects.length > 0) return;
@@ -1300,7 +1301,7 @@
                 console.error("Failed to load subjects for filters", err);
             }
         }
-
+    
         function loadDataForReportFilters() {
             const classFilter = document.getElementById('report-class-filter');
             if (classFilter.options.length <= 1) {
@@ -1309,7 +1310,7 @@
                     classFilter.add(new Option(className, className));
                 });
             }
-
+    
             const subjectFilter = document.getElementById('report-subject-filter');
             if (subjectFilter.options.length <= 1) {
                 subjects.sort((a,b) => a.subjectname.localeCompare(b.subjectname)).forEach(subject => {
@@ -1317,19 +1318,19 @@
                 });
             }
         }
-
+    
         async function generateReport() {
             const reportTableBody = document.getElementById('report-table-body');
             const linePreview = document.getElementById('line-preview-data');
             const sendLineBtn = document.getElementById('send-line-btn');
             const sendPresentLineBtn = document.getElementById('send-present-line-btn');
-
+    
             reportTableBody.innerHTML = `<tr><td colspan="8" class="text-center p-8"><div class="loader w-8 h-8 rounded-full border-4 border-gray-200 mx-auto"></div></td></tr>`;
             linePreview.innerHTML = '<p class="text-gray-500">กำลังโหลดข้อมูล...</p>';
             sendLineBtn.disabled = true;
             sendPresentLineBtn.disabled = true;
             document.getElementById('report-results-container').classList.remove('hidden');
-
+    
             const reportData = { 
                 classFilter: document.getElementById('report-class-filter').value,
                 subjectFilter: document.getElementById('report-subject-filter').value,
@@ -1342,14 +1343,14 @@
                     const { summary, lineData, presentData } = response.data;
                     lastReportDataForLine = lineData;
                     lastReportDataForPresentLine = presentData;
-
+    
                     reportTableBody.innerHTML = '';
                     if (summary.length === 0) {
                         reportTableBody.innerHTML = `<tr><td colspan="8" class="text-center p-8 text-gray-500">ไม่พบข้อมูลตามเงื่อนไขที่เลือก</td></tr>`;
                         linePreview.innerHTML = '<p class="text-gray-500">ไม่พบข้อมูล</p>';
                         return;
                     }
-
+    
                     summary.forEach(item => {
                         const row = `<tr>
                                 <td class="p-3 text-left">${item.class}</td>
@@ -1367,11 +1368,11 @@
                     const absentPreview = lineData.map(d => `<div><span class="text-red-500">[ขาด/ลา]</span> ${d.id} ${d.name} (${d.status})</div>`).join('');
                     const presentPreview = presentData.map(d => `<div><span class="text-green-500">[มาเรียน]</span> ${d.id} ${d.name}</div>`).join('');
                     linePreview.innerHTML = absentPreview + presentPreview || '<p class="text-gray-500">ไม่มีข้อมูลนักเรียน</p>';
-
+    
                     document.getElementById('report-title').innerText = `ผลลัพธ์สำหรับวันที่ ${new Date(reportData.dateFilter).toLocaleDateString('th-TH')}`;
                     sendLineBtn.disabled = lineData.length === 0;
                     sendPresentLineBtn.disabled = presentData.length === 0;
-
+    
                 } else {
                     throw new Error(response.error);
                 }
@@ -1389,7 +1390,7 @@
             const btn = document.getElementById('send-line-btn');
             btn.disabled = true;
             btn.querySelector('span').innerText = 'กำลังส่ง...';
-
+    
             try {
                 const response = await apiCall({ action: 'sendLineNotification', data: lastReportDataForLine });
                 alert(response.message);
@@ -1406,11 +1407,11 @@
                 alert('ไม่มีข้อมูลนักเรียนที่มาเรียน สำหรับส่ง');
                 return;
             }
-
+    
             const btn = document.getElementById('send-present-line-btn');
             btn.disabled = true;
             btn.querySelector('span').innerText = 'กำลังส่ง...';
-
+    
             try {
                 const response = await apiCall({ action: 'sendPresentNotification', data: lastReportDataForPresentLine });
                 alert(response.message);
@@ -1421,7 +1422,7 @@
                 btn.querySelector('span').innerText = 'ส่งแจ้งเตือน (มาเรียน)';
             }
         }
-
+    
         // --- SUMMARY REPORT & SCORING ---
         function loadDataForSummaryFilters() {
             const classFilter = document.getElementById('summary-class-filter');
@@ -1436,7 +1437,7 @@
             tableBody.innerHTML = `<tr><td colspan="7" class="text-center p-8"><div class="loader w-8 h-8 rounded-full border-4 border-gray-200 mx-auto"></div><p>กำลังประมวลผลสรุปผล...</p></td></tr>`;
             document.getElementById('student-detail-container').classList.add('hidden');
             document.getElementById('export-excel-btn').classList.add('hidden');
-
+    
             const dateValue = document.getElementById('summary-date-filter').value;
             const filters = {
                 classFilter: document.getElementById('summary-class-filter').value,
@@ -1448,7 +1449,7 @@
                 if (response.success) {
                     summaryReportData = response.data;
                     tableBody.innerHTML = '';
-
+    
                     if (summaryReportData.summary.length === 0) {
                         tableBody.innerHTML = `<tr><td colspan="7" class="text-center p-8 text-gray-500">ไม่พบข้อมูลตามเงื่อนไขที่เลือก</td></tr>`;
                         return;
@@ -1495,7 +1496,7 @@
       
                            const scoreKey = `${student.studentid}|${subjectName}`;
                 const currentScore = summaryReportData.scores[scoreKey] || '';
-
+    
                 const row = document.createElement('tr');
                 row.innerHTML = `
                      <td class="p-2">${student.studentid}</td>
@@ -1512,7 +1513,7 @@
                     </td>`;
                 detailTableBody.appendChild(row);
             });
-
+    
             detailContainer.classList.remove('hidden');
             detailContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
             lucide.createIcons();
@@ -1533,7 +1534,7 @@
                     const saveBtn = event.target.closest('button');
                     saveBtn.disabled = true;
                     saveBtn.querySelector('span').innerText = 'กำลังบันทึก...';
-
+    
                     const response = await apiCall({ action: 'updateAttendanceScores', data: scoresToSave });
                     alert(response.success ? 'บันทึกคะแนนเรียบร้อย' : `เกิดข้อผิดพลาด: ${response.error}`);
                     if (response.success) {
@@ -1573,7 +1574,7 @@
             
             XLSX.writeFile(workbook, `สรุปการเข้าเรียน-${new Date().toISOString().split('T')[0]}.xlsx`);
         }
-
+    
         // --- UTILITIES ---
         function getLocation() {
             if (navigator.geolocation) {
