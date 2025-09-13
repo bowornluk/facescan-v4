@@ -413,7 +413,7 @@
         let lastReportDataForPresentLine = [];
         let studentSortOrder = 'asc';
         let summaryReportData = {}; 
-        let activeTab = 'dashboard'; // Track active tab
+        let activeTab = 'dashboard';
 
         // --- THEME ---
         function applyTheme(theme) {
@@ -486,7 +486,7 @@
         
         // --- UI & NAVIGATION ---
         async function switchTab(tabName) {
-            activeTab = tabName; // Update active tab tracker
+            activeTab = tabName;
             stopScanning(false);
             ['dashboard', 'students', 'attendance', 'manage', 'report', 'summary'].forEach(name => {
                 const contentEl = document.getElementById(`content-${name}`);
@@ -505,7 +505,7 @@
             if (tabName === 'dashboard') {
                 await loadStudentData();
                 await loadAttendanceDataForDashboard();
-            } else if (tabName === 'students') { // Handle new students tab
+            } else if (tabName === 'students') {
                 await loadStudentDataForStudentsPage();
             } else if (tabName === 'manage') { 
                 await loadSubjectsForTable();
@@ -547,7 +547,6 @@
             }
         }
         
-        // [UPDATED] To accept forceRefresh parameter
         async function loadStudentData(forceRefresh = false) {
             const rosterLoading = document.getElementById('roster-loading');
             if (!forceRefresh && students.length > 0) return;
@@ -615,7 +614,7 @@
             let presentCount = 0, absentOrLeaveCount = 0;
             const uniqueDailyChecks = new Set();
             filteredForOverall.forEach(rec => {
-                const key = `${rec.timestamp.toDateString()}-${rec.studentid}-${rec.subject}`;
+                const key = `${rec.timestamp.toDateString()}-${rec.id}-${rec.subject}`;
                 if (uniqueDailyChecks.has(key)) return;
                 if (rec.status === 'มาเรียน') {
                     presentCount++;
@@ -788,7 +787,7 @@
                 });
                 if (response.success && response.data) {
                     response.data.forEach(rec => {
-                        checkedInToday.set(String(rec.studentid), rec);
+                        checkedInToday.set(String(rec.id), rec);
                     });
                 }
             } catch (error) {
@@ -1085,7 +1084,7 @@
         
         async function loadStudentDataForStudentsPage() {
             try {
-                await loadStudentData(true); // Always force a refresh
+                await loadStudentData(true); 
                 sortStudentTable(true);
             } catch(err) {
                  console.error('Error loading students for Students page:', err);
@@ -1224,7 +1223,6 @@
             }
         }
         
-        // Generic subject loader
         async function loadSubjects() {
             if (subjects.length > 0) return;
             try {
@@ -1321,15 +1319,7 @@
     
         // --- REPORTS ---
         async function loadSubjectsForFilters() {
-            if (subjects.length > 0) return;
-            try {
-                const response = await apiCall({ action: 'getSubjects' });
-                if (response.success) {
-                    subjects = response.data;
-                }
-            } catch (err) {
-                console.error("Failed to load subjects for filters", err);
-            }
+            await loadSubjects(); // Use generic loader
         }
     
         function loadDataForReportFilters() {
@@ -1342,11 +1332,10 @@
             }
     
             const subjectFilter = document.getElementById('report-subject-filter');
-            if (subjectFilter.options.length <= 1) {
-                subjects.sort((a,b) => a.subjectname.localeCompare(b.subjectname)).forEach(subject => {
-                    subjectFilter.add(new Option(subject.subjectname, subject.subjectname));
-                });
-            }
+            subjectFilter.innerHTML = '<option value="all">ทุกรายวิชา</option>'; // Clear previous
+            subjects.sort((a,b) => a.subjectname.localeCompare(b.subjectname)).forEach(subject => {
+                subjectFilter.add(new Option(subject.subjectname, subject.subjectname));
+            });
         }
     
         async function generateReport() {
@@ -1519,7 +1508,7 @@
             const studentsInClass = summaryReportData.allStudents.filter(s => s.class === className);
             const attendanceDetails = summaryReportData.details.filter(d => d.class === className && d.subject === subjectName);
             studentsInClass.forEach(student => {
-                const studentRecords = attendanceDetails.filter(d => d.studentid == student.id);
+                const studentRecords = attendanceDetails.filter(d => d.id == student.id);
                 const presentCount = studentRecords.filter(r => r.status === 'มาเรียน').length;
                 const absentCount = studentRecords.filter(r => r.status === 'ขาด').length;
                 const leaveCount = studentRecords.filter(r => r.status === 'ลา').length;
