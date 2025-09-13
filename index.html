@@ -103,6 +103,15 @@
                     <div id="student-roster-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 max-h-[60vh] overflow-y-auto custom-scrollbar pr-2"></div>
                      <div id="roster-loading" class="text-center py-8"><div class="loader w-12 h-12 rounded-full border-4 border-gray-200 dark:border-gray-700 mx-auto"></div><p class="mt-4 text-gray-600 dark:text-gray-400">กำลังโหลดข้อมูลนักเรียน...</p></div>
                 </div>
+                <div class="bg-white dark:bg-gray-800 p-4 sm:p-6 rounded-lg shadow-md">
+                    <h3 class="font-semibold mb-4">รายวิชาทั้งหมดในระบบ</h3>
+                    <div id="subject-roster-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 max-h-[60vh] overflow-y-auto custom-scrollbar pr-2">
+                    </div>
+                    <div id="subject-roster-loading" class="text-center py-8">
+                        <div class="loader w-12 h-12 rounded-full border-4 border-gray-200 dark:border-gray-700 mx-auto"></div>
+                        <p class="mt-4 text-gray-600 dark:text-gray-400">กำลังโหลดข้อมูลรายวิชา...</p>
+                    </div>
+                </div>
             </div>
 
             <div id="content-attendance" class="hidden space-y-6">
@@ -379,7 +388,6 @@
 
 
     <script>
-        // --- GLOBAL STATE & CONFIG ---
         let gasWebAppUrl = '';
         let faceMatcher = null, pieChart;
         let students = [], attendance = [], checkedInToday = new Map();
@@ -390,7 +398,6 @@
         let studentSortOrder = 'asc';
         let summaryReportData = {}; 
 
-        // --- THEME ---
         function applyTheme(theme) {
             const chartTextColor = theme === 'dark' ? 'rgba(229, 231, 235, 0.8)' : 'rgba(55, 65, 81, 0.9)';
             const chartGridColor = theme === 'dark' ? 'rgba(75, 85, 99, 0.5)' : 'rgba(209, 213, 219, 0.5)';
@@ -413,7 +420,6 @@
             applyTheme(newTheme);
         }
 
-        // --- INITIALIZATION ---
         window.onload = async () => {
             lucide.createIcons();
             const savedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
@@ -457,7 +463,6 @@
             switchTab('dashboard');
         }
         
-        // --- UI & NAVIGATION ---
         async function switchTab(tabName) {
             stopScanning(false);
             ['dashboard', 'attendance', 'manage', 'report', 'summary'].forEach(name => {
@@ -477,6 +482,7 @@
             if (tabName === 'dashboard') {
                 await loadStudentData();
                 await loadAttendanceDataForDashboard();
+                await loadSubjectsForDashboard();
             } else if (tabName === 'manage') { 
                 await loadStudentDataForTable();
                 await loadSubjectDataForTable();
@@ -492,7 +498,6 @@
             }
         }
         
-        // --- DATA LOADING ---
         async function apiCall(payload) {
             if (!gasWebAppUrl) {
                 alert('กรุณาตั้งค่า Google Apps Script URL ก่อน โดยการรีเฟรชหน้าเว็บ');
@@ -540,7 +545,6 @@
             }
         }
 
-        // --- DASHBOARD ---
         function renderStudentRosterForDashboard() {
             const rosterGrid = document.getElementById('student-roster-grid');
             if(!rosterGrid) return;
@@ -628,7 +632,45 @@
             pieChart = new Chart(ctx, { type: 'pie', data: { labels: ['มาเรียน', 'ขาด/ลา'], datasets: [{ data: [present, absent], backgroundColor: ['#34D399', '#F87171'] }] }, options: { responsive: true, maintainAspectRatio: false } });
         }
         
-        // --- ATTENDANCE PROCESS ---
+        async function loadSubjectsForDashboard() {
+            const subjectLoading = document.getElementById('subject-roster-loading');
+            try {
+                subjectLoading.style.display = 'block';
+                const response = await apiCall({ action: 'getSubjects' });
+                if (response.success) {
+                    renderSubjectsForDashboard(response.data);
+                } else {
+                    throw new Error(response.error || 'Failed to load subjects');
+                }
+            } catch (error) {
+                console.error('Error loading subjects for dashboard:', error);
+                document.getElementById('subject-roster-grid').innerHTML = '<p class="col-span-full text-center text-red-500">ไม่สามารถโหลดข้อมูลรายวิชาได้</p>';
+            } finally {
+                subjectLoading.style.display = 'none';
+            }
+        }
+
+        function renderSubjectsForDashboard(subjects) {
+            const rosterGrid = document.getElementById('subject-roster-grid');
+            if (!rosterGrid) return;
+            rosterGrid.innerHTML = '';
+
+            if (!subjects || subjects.length === 0) {
+                rosterGrid.innerHTML = '<p class="col-span-full text-center text-gray-500">ยังไม่มีข้อมูลรายวิชาในระบบ</p>';
+            } else {
+                subjects.forEach(subject => {
+                    const card = document.createElement('div');
+                    card.className = 'bg-gray-50 dark:bg-gray-700/50 p-3 rounded-lg text-center';
+                    const imageUrl = subject.teacherimagedatabase64 || 'https://placehold.co/150x150/e2e8f0/475569?text=No+Img';
+                    card.innerHTML = `
+                        <img src="${imageUrl}" class="w-24 h-24 rounded-full object-cover mx-auto mb-2 border-2 border-gray-300 dark:border-gray-600">
+                        <p class="font-semibold text-sm">${subject.subjectname}</p>
+                    `;
+                    rosterGrid.appendChild(card);
+                });
+            }
+        }
+        
         async function loadSubjects() {
             try {
                 const response = await apiCall({ action: 'getSubjects' });
