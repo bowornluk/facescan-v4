@@ -1077,6 +1077,7 @@
         // [FIXED] This function no longer clears the students array.
         async function loadStudentDataForTable() {
             try {
+                // The `students = [];` line that caused the error has been removed.
                 await loadStudentData(); // Uses cached data if available, or fetches if not.
                 studentSortOrder = 'desc';
                 sortStudentTable();
