@@ -406,7 +406,7 @@
         let currentGeoLocation = null;
         let currentSubject = '';
         let lastReportDataForLine = [];
-        let lastReportDataForPresentLine = []; // [NEW] For present students
+        let lastReportDataForPresentLine = [];
         let studentSortOrder = 'asc';
         let summaryReportData = {}; 
 
@@ -507,7 +507,7 @@
                 await loadSubjectsForDropdown();
             } else if (tabName === 'report') {
                 await loadStudentData();
-                await loadSubjectsForFilters(); // [UPDATED] Load subjects for report filter
+                await loadSubjectsForFilters();
                 loadDataForReportFilters();
             } else if (tabName === 'summary') {
                 await loadStudentData();
@@ -1075,7 +1075,6 @@
         }
         async function loadStudentDataForTable() {
             try {
-               
                 await loadStudentData();
                 studentSortOrder = 'desc';
                 sortStudentTable();
@@ -1140,7 +1139,7 @@
                 const response = await apiCall({ action: action, data: studentData });
                 if (response.success) { 
                     closeStudentModal();
-                    loadStudentDataForTable(); 
+                    await loadStudentDataForTable(); // Use await to ensure data is reloaded
                 } else { 
                     alert('Error: ' + (response.error || 'Unknown error'));
                 }
@@ -1156,7 +1155,7 @@
                 try {
                      const response = await apiCall({ action: 'deleteStudent', data: { rowIndex } });
                     if (response.success) { 
-                        loadStudentDataForTable();
+                        await loadStudentDataForTable(); // Use await
                     } else { 
                         alert('Error: ' + (response.error || 'Unknown error'));
                     }
@@ -1258,7 +1257,7 @@
                 const response = await apiCall({ action: action, data: subjectData });
                 if (response.success) {
                     closeSubjectModal();
-                    loadSubjectsForTable();
+                    await loadSubjectsForTable(); // Use await
                 } else {
                     alert('Error: ' + (response.error || 'Unknown error'));
                 }
@@ -1275,7 +1274,7 @@
                 try {
                      const response = await apiCall({ action: 'deleteSubject', data: { rowIndex } });
                     if (response.success) {
-                        loadSubjectsForTable();
+                        await loadSubjectsForTable(); // Use await
                     } else {
                         alert('Error: ' + (response.error || 'Unknown error'));
                     }
@@ -1286,9 +1285,8 @@
         }
 
         // --- REPORTS ---
-        // [NEW] Load subjects data for filter dropdowns
         async function loadSubjectsForFilters() {
-            if (subjects.length > 0) return; // Don't reload if already loaded
+            if (subjects.length > 0) return;
             try {
                 const response = await apiCall({ action: 'getSubjects' });
                 if (response.success) {
@@ -1330,7 +1328,7 @@
 
             const reportData = { 
                 classFilter: document.getElementById('report-class-filter').value,
-                subjectFilter: document.getElementById('report-subject-filter').value, // [NEW] Get subject filter value
+                subjectFilter: document.getElementById('report-subject-filter').value,
                 periodFilter: document.getElementById('report-period-filter').value, 
                 dateFilter: document.getElementById('report-date-filter').value 
             };
@@ -1339,7 +1337,7 @@
                 if (response.success) {
                     const { summary, lineData, presentData } = response.data;
                     lastReportDataForLine = lineData;
-                    lastReportDataForPresentLine = presentData; // [NEW] Store present data
+                    lastReportDataForPresentLine = presentData;
 
                     reportTableBody.innerHTML = '';
                     if (summary.length === 0) {
@@ -1399,7 +1397,6 @@
             }
         }
         
-        // [NEW] Function to send notification for present students
         async function sendPresentReportToLine() {
             if (!lastReportDataForPresentLine || lastReportDataForPresentLine.length === 0) {
                 alert('ไม่มีข้อมูลนักเรียนที่มาเรียน สำหรับส่ง');
