@@ -47,60 +47,61 @@
                     <i data-lucide="sun" id="theme-icon-sun" class="hidden w-5 h-5"></i>
                     <i data-lucide="moon" id="theme-icon-moon" class="hidden w-5 h-5"></i>
                 </button>
-            </div>
+           </div>
         </header>
 
         <main id="main-content">
             <div id="content-dashboard" class="hidden space-y-6">
                  <div class="bg-white dark:bg-gray-800 p-4 sm:p-6 rounded-lg shadow-md">
                      <div class="flex flex-col sm:flex-row items-center justify-between mb-4 gap-4">
-                        <h2 class="text-lg font-semibold text-gray-700 dark:text-gray-300">ภาพรวมการเข้าเรียน</h2>
+                         <h2 class="text-lg font-semibold text-gray-700 dark:text-gray-300">ภาพรวมการเข้าเรียน</h2>
                         <input type="date" id="dashboard-date" class="border rounded-lg p-2 w-full sm:w-auto bg-transparent dark:text-gray-200 dark:border-gray-600">
                     </div>
                 
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 text-center">
+                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 text-center">
                         <div class="bg-blue-100 dark:bg-blue-900/50 p-4 rounded-lg"><h3 class="text-gray-600 dark:text-gray-400">มาเรียน (รวมทุกวิชา)</h3><p id="stat-present" class="text-3xl font-bold text-blue-700 dark:text-blue-400">0</p></div>
                         <div class="bg-red-100 dark:bg-red-900/50 p-4 rounded-lg"><h3 class="text-gray-600 dark:text-gray-400">ขาด/ลา (รวมทุกวิชา)</h3><p id="stat-absent" class="text-3xl font-bold text-red-700 dark:text-red-400">0</p></div>
-                    </div>
+                   </div>
 
                     <div class="grid grid-cols-1 lg:grid-cols-5 gap-6 mt-6">
                         <div class="lg:col-span-2 bg-gray-50 dark:bg-gray-700/50 p-4 rounded-lg">
                             <h3 class="font-semibold mb-2 text-center">สรุปการเข้าเรียนภาพรวม</h3>
-                            <div class="max-w-[250px] mx-auto">
+                             <div class="max-w-[250px] mx-auto">
                                 <canvas id="attendance-pie-chart"></canvas>
                             </div>
-                        </div>
+                         </div>
 
                         <div class="lg:col-span-3 bg-gray-50 dark:bg-gray-700/50 p-4 rounded-lg">
                             <div class="flex flex-col sm:flex-row justify-between items-center mb-3 gap-2">
                                 <h3 class="font-semibold text-center">ภาพรวมการมาเรียน (รายวิชา)</h3>
                                 <div class="flex-shrink-0">
                                     <select id="summary-period" class="border rounded-lg p-1.5 bg-transparent dark:text-gray-200 dark:border-gray-600 text-sm">
-                                        <option value="day">รายวัน</option>
+                                         <option value="day">รายวัน</option>
                                         <option value="week">รายสัปดาห์</option>
                                         <option value="month">รายเดือน</option>
                                     </select>
                                 </div>
                             </div>
-                            <div class="overflow-x-auto max-h-60 custom-scrollbar">
+    
+                             <div class="overflow-y-auto max-h-60 custom-scrollbar pr-2">
                                 <table class="w-full text-sm text-left">
                                     <thead class="bg-gray-200 dark:bg-gray-600 sticky top-0">
                                         <tr>
-                                            <th class="p-2">รายวิชา</th>
-                                            <th class="p-2 text-center">มา</th>
+                                            <th class="p-2">รายวิชา / ผู้สอน</th>
+                                             <th class="p-2 text-center">มา</th>
                                             <th class="p-2 text-center">ขาด/ลา</th>
-                                        </tr>
+                                         </tr>
                                     </thead>
                                     <tbody id="subject-summary-table-body">
-                                    </tbody>
+                                     </tbody>
                                 </table>
                             </div>
-                        </div>
+                         </div>
                     </div>
                 </div>
                 <div class="bg-white dark:bg-gray-800 p-4 sm:p-6 rounded-lg shadow-md">
                     <h3 class="font-semibold mb-4">รายชื่อนักเรียนในระบบ</h3>
-                    <div id="student-roster-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 max-h-[60vh] overflow-y-auto custom-scrollbar pr-2"></div>
+                     <div id="student-roster-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 max-h-[60vh] overflow-y-auto custom-scrollbar pr-2"></div>
                      <div id="roster-loading" class="text-center py-8"><div class="loader w-12 h-12 rounded-full border-4 border-gray-200 dark:border-gray-700 mx-auto"></div><p class="mt-4 text-gray-600 dark:text-gray-400">กำลังโหลดข้อมูลนักเรียน...</p></div>
                 </div>
             </div>
@@ -110,14 +111,14 @@
                     <h2 class="text-2xl font-bold mb-4">เริ่มการเช็คชื่อ</h2>
                     <p class="text-gray-600 dark:text-gray-400 mb-4">กรุณาเลือกรายวิชาที่ต้องการเช็คชื่อ</p>
                     <div class="max-w-xs mx-auto mb-6">
-                        <select id="subject-select" class="w-full border rounded-lg p-3 bg-transparent dark:text-gray-200 dark:border-gray-600">
+                         <select id="subject-select" class="w-full border rounded-lg p-3 bg-transparent dark:text-gray-200 dark:border-gray-600">
                             <option value="">-- กรุณาเลือกรายวิชา --</option>
                         </select>
-                    </div>
+                     </div>
                     <button id="start-scan-btn" onclick="startScanning()" class="bg-blue-600 text-white px-8 py-3 rounded-full hover:bg-blue-700 text-lg font-semibold flex items-center justify-center mx-auto gap-2 disabled:bg-gray-400 disabled:cursor-not-allowed" disabled>
                         <i data-lucide="camera"></i><span>เริ่มเช็คชื่อ</span>
                     </button>
-                    <button id="manual-check-btn" onclick="startManualCheck()" class="mt-4 bg-gray-600 text-white px-8 py-3 rounded-full hover:bg-gray-700 text-lg font-semibold flex items-center justify-center mx-auto gap-2 disabled:bg-gray-400 disabled:cursor-not-allowed" disabled>
+                     <button id="manual-check-btn" onclick="startManualCheck()" class="mt-4 bg-gray-600 text-white px-8 py-3 rounded-full hover:bg-gray-700 text-lg font-semibold flex items-center justify-center mx-auto gap-2 disabled:bg-gray-400 disabled:cursor-not-allowed" disabled>
                         <i data-lucide="list-checks"></i><span>เช็คชื่อ/แก้ไข ด้วยตนเอง</span>
                     </button>
                 </div>
@@ -125,13 +126,13 @@
                 <div id="scanning-section" class="hidden space-y-6">
                     <div class="bg-white dark:bg-gray-800 p-4 sm:p-6 rounded-lg shadow-md flex flex-col items-center">
                         <h2 class="text-lg font-semibold mb-4 text-gray-700 dark:text-gray-300">กำลังสแกน... <span id="current-subject-display" class="font-normal text-blue-600 dark:text-blue-400"></span></h2>
-                        <div id="video-loader" class="flex flex-col items-center justify-center h-64 w-full">
+                         <div id="video-loader" class="flex flex-col items-center justify-center h-64 w-full">
                             <div class="loader w-12 h-12 rounded-full border-4 border-gray-200 dark:border-gray-700"></div>
                             <p id="video-loading-text" class="mt-4 text-gray-600 dark:text-gray-400">กำลังเปิดกล้อง...</p>
-                        </div>
+                         </div>
                         <div class="w-full max-w-4xl mx-auto bg-black rounded-lg overflow-hidden relative aspect-video hidden" id="video-wrapper">
                             <video id="video" class="w-full h-full" autoplay muted playsinline></video>
-                            <canvas id="overlay" class="absolute top-0 left-0"></canvas>
+                             <canvas id="overlay" class="absolute top-0 left-0"></canvas>
                             <div id="scan-success-overlay" class="absolute inset-0 bg-green-900 bg-opacity-70 text-white text-2xl font-bold flex items-center justify-center hidden animate-fade-in">
                                 <span id="scan-success-name"></span>&nbsp;เช็คชื่อสำเร็จ!
                             </div>
@@ -144,104 +145,147 @@
                     </div>
                 </div>
 
-                <div id="absence-management-section" class="hidden bg-white dark:bg-gray-800 p-4 sm:p-6 rounded-lg shadow-md">
+                 <div id="absence-management-section" class="hidden bg-white dark:bg-gray-800 p-4 sm:p-6 rounded-lg shadow-md">
                     <h2 class="text-xl font-bold mb-4">สรุปผลการเช็คชื่อ</h2>
                     <p class="text-gray-600 dark:text-gray-400 mb-4">ตรวจสอบสถานะของนักเรียนและกดบันทึกเพื่อยืนยัน</p>
                     <div id="absent-list" class="space-y-3 max-h-80 overflow-y-auto custom-scrollbar pr-2"></div>
-                    <div class="text-right mt-6">
+                     <div class="text-right mt-6">
                         <button onclick="finishAttendance()" class="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700">บันทึกและเสร็จสิ้น</button>
                     </div>
                 </div>
             </div>
 
-            <div id="content-manage" class="hidden">
-                 <div class="bg-white dark:bg-gray-800 p-4 sm:p-6 rounded-lg shadow-md"><div class="flex flex-col sm:flex-row justify-between items-center mb-4 gap-4"><h2 class="text-lg font-semibold text-gray-700 dark:text-gray-300">จัดการข้อมูลนักเรียน</h2><button onclick="openStudentModal()" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 flex items-center space-x-2 w-full sm:w-auto justify-center"><i data-lucide="user-plus"></i><span>เพิ่มนักเรียน</span></button></div><div class="overflow-x-auto"><table class="w-full text-left min-w-[600px]"><thead class="bg-gray-50 dark:bg-gray-700/50"><tr><th id="student-id-header" onclick="sortStudentTable()" class="p-3 sortable-header">รหัสนักเรียน <i data-lucide="arrow-down-up" class="inline-block w-4 h-4"></i></th><th class="p-3">ชื่อ-สกุล</th><th class="p-3">ชั้นเรียน</th><th class="p-3 text-center">จัดการ</th></tr></thead><tbody id="student-table-body" class="divide-y divide-gray-200 dark:divide-gray-700"></tbody></table></div></div>
+            <div id="content-manage" class="hidden space-y-6">
+                <div class="bg-white dark:bg-gray-800 p-4 sm:p-6 rounded-lg shadow-md">
+                    <div class="flex flex-col sm:flex-row justify-between items-center mb-4 gap-4">
+                        <h2 class="text-lg font-semibold text-gray-700 dark:text-gray-300">จัดการข้อมูลนักเรียน</h2>
+                        <button onclick="openStudentModal()" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 flex items-center space-x-2 w-full sm:w-auto justify-center">
+                            <i data-lucide="user-plus"></i><span>เพิ่มนักเรียน</span>
+                        </button>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left min-w-[600px]">
+                            <thead class="bg-gray-50 dark:bg-gray-700/50">
+                                <tr>
+                                    <th id="student-id-header" onclick="sortStudentTable()" class="p-3 sortable-header">รหัสนักเรียน <i data-lucide="arrow-down-up" class="inline-block w-4 h-4"></i></th>
+                                    <th class="p-3">ชื่อ-สกุล</th>
+                                    <th class="p-3">ชั้นเรียน</th>
+                                    <th class="p-3 text-center">จัดการ</th>
+                                </tr>
+                            </thead>
+                            <tbody id="student-table-body" class="divide-y divide-gray-200 dark:divide-gray-700"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="bg-white dark:bg-gray-800 p-4 sm:p-6 rounded-lg shadow-md">
+                    <div class="flex flex-col sm:flex-row justify-between items-center mb-4 gap-4">
+                        <h2 class="text-lg font-semibold text-gray-700 dark:text-gray-300">จัดการข้อมูลรายวิชา</h2>
+                        <button onclick="openSubjectModal()" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 flex items-center space-x-2 w-full sm:w-auto justify-center">
+                            <i data-lucide="book-plus"></i><span>เพิ่มรายวิชา</span>
+                        </button>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left min-w-[600px]">
+                            <thead class="bg-gray-50 dark:bg-gray-700/50">
+                                <tr>
+                                    <th class="p-3">รูป</th>
+                                    <th class="p-3">ชื่อวิชา</th>
+                                    <th class="p-3">ชื่อผู้สอน</th>
+                                    <th class="p-3 text-center">จัดการ</th>
+                                </tr>
+                            </thead>
+                            <tbody id="subject-table-body" class="divide-y divide-gray-200 dark:divide-gray-700"></tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
+
 
             <div id="content-report" class="hidden">
                 <div class="bg-white dark:bg-gray-800 p-4 sm:p-6 rounded-lg shadow-md space-y-4">
                     <h2 class="text-xl font-bold">รายงานสถิติการมาเรียน</h2>
                     <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
                         <div>
-                            <label for="report-class-filter" class="block font-medium mb-1 text-sm">เลือกชั้นเรียน:</label>
+                             <label for="report-class-filter" class="block font-medium mb-1 text-sm">เลือกชั้นเรียน:</label>
                             <select id="report-class-filter" class="w-full border rounded-lg p-2 bg-transparent dark:text-gray-200 dark:border-gray-600">
                                 <option value="all">ทุกชั้นเรียน</option>
-                            </select>
+                             </select>
                         </div>
                         <div>
                             <label for="report-period-filter" class="block font-medium mb-1 text-sm">เลือกช่วงเวลา:</label>
                             <select id="report-period-filter" class="w-full border rounded-lg p-2 bg-transparent dark:text-gray-200 dark:border-gray-600">
                                 <option value="day">รายวัน</option>
-                                <option value="week">รายสัปดาห์</option>
+                                 <option value="week">รายสัปดาห์</option>
                                 <option value="month">รายเดือน</option>
                             </select>
                         </div>
-                        <div>
+                         <div>
                             <label for="report-date-filter" class="block font-medium mb-1 text-sm">เลือกวัน/เริ่มต้นสัปดาห์/เดือน:</label>
                             <input type="date" id="report-date-filter" class="w-full border rounded-lg p-2 bg-transparent dark:text-gray-200 dark:border-gray-600">
-                        </div>
+                         </div>
                         <button onclick="generateReport()" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 h-10 flex items-center justify-center gap-2">
                             <i data-lucide="search"></i><span>แสดงรายงาน</span>
                         </button>
-                    </div>
+                     </div>
                     
                     <div id="report-results-container" class="hidden">
                         <h3 class="text-lg font-semibold mt-6 mb-2" id="report-title">ผลลัพธ์</h3>
-                        <div class="overflow-x-auto">
+                         <div class="overflow-x-auto">
                             <table class="w-full min-w-[900px]">
                                 <thead class="bg-gray-50 dark:bg-gray-700/50">
-                                    <tr>
+                                     <tr>
                                         <th class="p-3 text-left">ชั้น</th>
                                         <th class="p-3 text-left">รายวิชา</th>
-                                        <th class="p-3 text-center">นักเรียนทั้งหมด</th>
+                                         <th class="p-3 text-center">นักเรียนทั้งหมด</th>
                                         <th class="p-3 text-center">มา</th>
-                                        <th class="p-3 text-center">ขาด</th>
+                                         <th class="p-3 text-center">ขาด</th>
                                         <th class="p-3 text-center">ลา</th>
-                                        <th class="p-3 text-center">รวมมาเรียน</th>
+                                         <th class="p-3 text-center">รวมมาเรียน</th>
                                         <th class="p-3 text-center">% มาเรียน</th>
                                     </tr>
-                                </thead>
+                                 </thead>
                                 <tbody id="report-table-body" class="divide-y divide-gray-200 dark:divide-gray-700">
                                 </tbody>
-                            </table>
+                             </table>
                         </div>
                         
                         <div class="mt-6 flex flex-col md:flex-row items-start gap-4">
-                            <div class="w-full md:w-1/2">
+                              <div class="w-full md:w-1/2">
                                 <h4 class="font-semibold mb-2">ข้อมูลรายบุคคล (สำหรับส่ง LINE - เฉพาะคนขาด/ลา)</h4>
                                 <div id="line-preview-data" class="max-h-60 overflow-y-auto custom-scrollbar text-sm p-3 border dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-900/50">
                                     <p class="text-gray-500">กรุณากด "แสดงรายงาน" เพื่อดูข้อมูล</p>
                                 </div>
-                            </div>
+                             </div>
                             <div class="w-full md:w-1/2 flex justify-end items-start pt-8">
                                 <button onclick="sendReportToLine()" id="send-line-btn" class="bg-green-600 text-white px-5 py-2 rounded-lg hover:bg-green-700 flex items-center gap-2 ml-auto disabled:bg-gray-400 disabled:cursor-not-allowed" disabled>
-                                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 496 512"><path d="M248,8C111.033,8,0,119.033,0,256S111.033,504,248,504,496,392.967,496,256,384.967,8,248,8ZM362.952,176.66c-3.732,39.215-19.881,134.378-28.1,178.3-3.476,18.584-10.322,24.816-16.948,25.425-14.4,1.326-25.438-9.333-39.687-18.5-21.861-14.108-34.254-23.219-51.353-36.5-25.134-19.524-12.63-29.562,8.874-45.888,58.342-46.182,109.1-87.072,112.554-87.843,1.673-.374,3.582-.6,5.14-.6,1.48,0,2.83,.41,4.032,1.233,1.328,.89,1.94,2.123,2.023,3.383.094,1.468-.6,2.946-1.8,4.432-1.352,1.622-24,21.54-66.27,54.733-16.53,13.01-29.3,23.465-29.745,24.788-.465,1.378-1.042,5.555.884,8.06,2.052,2.695,18.023,17.48,27.5,26.936,9.22,9.186,16.262,16.222,23.32,23.254,12.71,12.72,24.03,6.368,27.78-4.18,11.39-31.9,41.62-136.1,49.28-176.314.93-4.956-.942-9.287-4.15-11.66-3.208-2.373-7.464-2.61-11.129-.75Z"/></svg>
+                                     <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 496 512"><path d="M248,8C111.033,8,0,119.033,0,256S111.033,504,248,504,496,392.967,496,256,384.967,8,248,8ZM362.952,176.66c-3.732,39.215-19.881,134.378-28.1,178.3-3.476,18.584-10.322,24.816-16.948,25.425-14.4,1.326-25.438-9.333-39.687-18.5-21.861-14.108-34.254-23.219-51.353-36.5-25.134-19.524-12.63-29.562,8.874-45.888,58.342-46.182,109.1-87.072,112.554-87.843,1.673-.374,3.582-.6,5.14-.6,1.48,0,2.83,.41,4.032,1.233,1.328,.89,1.94,2.123,2.023,3.383.094,1.468-.6,2.946-1.8,4.432-1.352,1.622-24,21.54-66.27,54.733-16.53,13.01-29.3,23.465-29.745,24.788-.465,1.378-1.042,5.555.884,8.06,2.052,2.695,18.023,17.48,27.5,26.936,9.22,9.186,16.262,16.222,23.32,23.254,12.71,12.72,24.03,6.368,27.78-4.18,11.39-31.9,41.62-136.1,49.28-176.314.93-4.956-.942-9.287-4.15-11.66-3.208-2.373-7.464-2.61-11.129-.75Z"/></svg>
                                     <span>ส่งรายงานเข้า LINE</span>
                                 </button>
-                            </div>
+                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            
+  
             <div id="content-summary" class="hidden">
                 <div class="bg-white dark:bg-gray-800 p-4 sm:p-6 rounded-lg shadow-md space-y-4">
                     <h2 class="text-xl font-bold">สรุปการมาเรียนและคะแนน</h2>
                     <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
-                        <div>
+                         <div>
                             <label for="summary-class-filter" class="block font-medium mb-1 text-sm">เลือกชั้นเรียน:</label>
                             <select id="summary-class-filter" class="w-full border rounded-lg p-2 bg-transparent dark:text-gray-200 dark:border-gray-600">
-                                <option value="all">ทุกชั้นเรียน</option>
+                                 <option value="all">ทุกชั้นเรียน</option>
                             </select>
                         </div>
                         <div>
-                            <label for="summary-period-filter" class="block font-medium mb-1 text-sm">เลือกช่วงเวลา:</label>
+                             <label for="summary-period-filter" class="block font-medium mb-1 text-sm">เลือกช่วงเวลา:</label>
                             <select id="summary-period-filter" class="w-full border rounded-lg p-2 bg-transparent dark:text-gray-200 dark:border-gray-600">
                                 <option value="month">รายเดือน</option>
-                            </select>
+                             </select>
                         </div>
                         <div>
-                            <label for="summary-date-filter" class="block font-medium mb-1 text-sm">เลือกเดือน:</label>
+                           <label for="summary-date-filter" class="block font-medium mb-1 text-sm">เลือกเดือน:</label>
                             <input type="month" id="summary-date-filter" class="w-full border rounded-lg p-2 bg-transparent dark:text-gray-200 dark:border-gray-600">
                         </div>
                         <button onclick="generateSummaryReport()" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 h-10 flex items-center justify-center gap-2">
@@ -249,55 +293,55 @@
                         </button>
                     </div>
                     
-                    <div id="summary-results-container" class="mt-6">
+                     <div id="summary-results-container" class="mt-6">
                         <div class="flex justify-between items-center mb-2">
                             <h3 class="text-lg font-semibold">ภาพรวมรายวิชา</h3>
-                            <button onclick="exportSummaryToExcel()" id="export-excel-btn" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 text-sm flex items-center gap-2 hidden">
+                             <button onclick="exportSummaryToExcel()" id="export-excel-btn" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 text-sm flex items-center gap-2 hidden">
                                 <i data-lucide="file-down"></i><span>ส่งออกเป็น Excel</span>
                             </button>
-                        </div>
+                         </div>
                         <div class="overflow-x-auto">
                             <table class="w-full min-w-[800px]">
                                 <thead class="bg-gray-50 dark:bg-gray-700/50">
-                                    <tr>
+                                     <tr>
                                         <th class="p-3 text-left">ชั้น</th>
-                                        <th class="p-3 text-left">รายวิชา</th>
+                                         <th class="p-3 text-left">รายวิชา</th>
                                         <th class="p-3 text-center">นักเรียนทั้งหมด</th>
                                         <th class="p-3 text-center">มา</th>
-                                        <th class="p-3 text-center">ขาด</th>
+                                          <th class="p-3 text-center">ขาด</th>
                                         <th class="p-3 text-center">ลา</th>
-                                        <th class="p-3 text-center">% การเข้าเรียน</th>
+                                         <th class="p-3 text-center">% การเข้าเรียน</th>
                                     </tr>
                                 </thead>
-                                <tbody id="summary-table-body" class="divide-y divide-gray-200 dark:divide-gray-700">
+                                 <tbody id="summary-table-body" class="divide-y divide-gray-200 dark:divide-gray-700">
                                 </tbody>
                             </table>
-                        </div>
+                         </div>
                     </div>
 
                     <div id="student-detail-container" class="mt-8 hidden">
                         <h3 class="text-lg font-semibold mb-2" id="student-detail-title"></h3>
-                        <div class="overflow-x-auto max-h-[60vh] custom-scrollbar">
+                         <div class="overflow-x-auto max-h-[60vh] custom-scrollbar">
                              <table class="w-full min-w-[600px]">
                                 <thead class="bg-gray-50 dark:bg-gray-700/50 sticky top-0">
-                                    <tr>
+                                     <tr>
                                         <th class="p-3 text-left">รหัสนักเรียน</th>
                                         <th class="p-3 text-left">ชื่อ-สกุล</th>
-                                        <th class="p-3 text-center">มา</th>
+                                          <th class="p-3 text-center">มา</th>
                                         <th class="p-3 text-center">ขาด</th>
-                                        <th class="p-3 text-center">ลา</th>
+                                         <th class="p-3 text-center">ลา</th>
                                         <th class="p-3 text-center">คะแนนเข้าเรียน</th>
-                                    </tr>
+                                     </tr>
                                 </thead>
                                 <tbody id="student-detail-table-body" class="divide-y divide-gray-200 dark:divide-gray-700">
-                                </tbody>
+                                 </tbody>
                             </table>
                         </div>
                         <div class="text-right mt-4">
-                            <button onclick="saveScores(event)" class="bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700 flex items-center gap-2 ml-auto">
+                             <button onclick="saveScores(event)" class="bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700 flex items-center gap-2 ml-auto">
                                 <i data-lucide="save"></i> <span>บันทึกคะแนน</span>
                             </button>
-                        </div>
+                         </div>
                     </div>
                 </div>
             </div>
@@ -306,11 +350,45 @@
 
     <div id="student-modal" class="fixed inset-0 bg-gray-800 bg-opacity-70 flex items-center justify-center p-4 z-40 hidden"><div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 md:p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto custom-scrollbar"><h2 id="modal-title" class="text-2xl font-bold mb-6">เพิ่มข้อมูลนักเรียน</h2><form id="student-form" onsubmit="handleStudentFormSubmit(event)"><input type="hidden" id="student-row-index"><div class="grid grid-cols-1 md:grid-cols-2 gap-6"><div><label for="student-id" class="block font-medium mb-2">รหัสนักเรียน</label><input type="text" id="student-id" class="w-full border-gray-300 dark:border-gray-600 dark:bg-gray-700 rounded-lg p-3" required><label for="student-name" class="block font-medium mb-2 mt-4">ชื่อ-สกุล</label><input type="text" id="student-name" class="w-full border-gray-300 dark:border-gray-600 dark:bg-gray-700 rounded-lg p-3" required><label for="student-class" class="block font-medium mb-2 mt-4">ชั้นเรียน</label><input type="text" id="student-class" class="w-full border-gray-300 dark:border-gray-600 dark:bg-gray-700 rounded-lg p-3" required></div><div class="flex flex-col"><label class="block font-medium mb-2">รูปภาพนักเรียน</label><div id="input-upload" class="flex flex-col items-center"><div class="w-full max-w-xs mx-auto aspect-[4/3] bg-gray-200 dark:bg-gray-700 rounded-lg flex items-center justify-center overflow-hidden"><img id="image-preview" src="https://placehold.co/400x300/e2e8f0/475569?text=Image" class="w-full h-full object-cover"></div><input type="file" id="image-upload-input" accept="image/*" class="hidden"><button type="button" onclick="document.getElementById('image-upload-input').click()" class="bg-indigo-600 text-white px-4 py-2 mt-4 rounded-lg hover:bg-indigo-700 w-full max-w-xs">เลือกไฟล์รูปภาพ</button></div></div></div><input type="hidden" id="student-image-data"><div class="flex justify-end space-x-4 mt-8"><button type="button" onclick="closeStudentModal()" class="bg-gray-200 text-gray-700 dark:bg-gray-600 dark:text-gray-300 px-6 py-2 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-500">ยกเลิก</button><button type="submit" id="form-submit-btn" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700">บันทึก</button></div></form></div></div>
 
+    <div id="subject-modal" class="fixed inset-0 bg-gray-800 bg-opacity-70 flex items-center justify-center p-4 z-40 hidden">
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 md:p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto custom-scrollbar">
+            <h2 id="modal-title-subject" class="text-2xl font-bold mb-6">เพิ่มข้อมูลรายวิชา</h2>
+            <form id="subject-form" onsubmit="handleSubjectFormSubmit(event)">
+                <input type="hidden" id="subject-row-index">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label for="subject-name" class="block font-medium mb-2">ชื่อรายวิชา</label>
+                        <input type="text" id="subject-name" class="w-full border-gray-300 dark:border-gray-600 dark:bg-gray-700 rounded-lg p-3" required>
+                        
+                        <label for="teacher-name" class="block font-medium mb-2 mt-4">ชื่อครูผู้สอน</label>
+                        <input type="text" id="teacher-name" class="w-full border-gray-300 dark:border-gray-600 dark:bg-gray-700 rounded-lg p-3" required>
+                    </div>
+                    <div class="flex flex-col">
+                        <label class="block font-medium mb-2">รูปภาพครูประจำวิชา</label>
+                        <div class="flex flex-col items-center">
+                            <div class="w-full max-w-xs mx-auto aspect-[4/3] bg-gray-200 dark:bg-gray-700 rounded-lg flex items-center justify-center overflow-hidden">
+                                <img id="image-preview-subject" src="https://placehold.co/400x300/e2e8f0/475569?text=Image" class="w-full h-full object-cover">
+                            </div>
+                            <input type="file" id="image-upload-input-subject" accept="image/*" class="hidden">
+                            <button type="button" onclick="document.getElementById('image-upload-input-subject').click()" class="bg-indigo-600 text-white px-4 py-2 mt-4 rounded-lg hover:bg-indigo-700 w-full max-w-xs">เลือกไฟล์รูปภาพ</button>
+                        </div>
+                    </div>
+                </div>
+                <input type="hidden" id="subject-image-data">
+                <div class="flex justify-end space-x-4 mt-8">
+                    <button type="button" onclick="closeSubjectModal()" class="bg-gray-200 text-gray-700 dark:bg-gray-600 dark:text-gray-300 px-6 py-2 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-500">ยกเลิก</button>
+                    <button type="submit" id="form-submit-btn-subject" class="bg-purple-600 text-white px-6 py-2 rounded-lg hover:bg-purple-700">บันทึก</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
     <script>
         // --- GLOBAL STATE & CONFIG ---
         let gasWebAppUrl = '';
         let faceMatcher = null, pieChart;
-        let students = [], attendance = [], checkedInToday = new Map();
+        let students = [], subjects = [], attendance = [], checkedInToday = new Map();
         let isScanning = false, recognitionInterval = null;
         let currentGeoLocation = null;
         let currentSubject = '';
@@ -366,8 +444,10 @@
 
             document.getElementById('dashboard-date').addEventListener('change', renderDashboard);
             document.getElementById('summary-period').addEventListener('change', renderDashboard);
-            document.getElementById('image-upload-input').addEventListener('change', handleImageUpload);
+            document.getElementById('image-upload-input').addEventListener('change', e => handleImageUpload(e, 'image-preview', 'student-image-data'));
+            document.getElementById('image-upload-input-subject').addEventListener('change', e => handleImageUpload(e, 'image-preview-subject', 'subject-image-data'));
         };
+
         async function initializeApp() {
             try {
                 if (typeof faceapi === 'undefined') throw new Error('face-api.js has not been loaded.');
@@ -407,9 +487,10 @@
                 await loadAttendanceDataForDashboard();
             } else if (tabName === 'manage') { 
                 await loadStudentDataForTable();
+                await loadSubjectsForTable();
             } else if (tabName === 'attendance') {
                 await loadStudentDataForRecognition();
-                await loadSubjects();
+                await loadSubjectsForDropdown();
             } else if (tabName === 'report') {
                 await loadStudentData();
                 loadDataForReportFilters();
@@ -430,7 +511,7 @@
                     method: 'POST',
                     mode: 'cors',
                     redirect: 'follow',
-                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                     headers: { 'Content-Type': 'text/plain;charset=utf-8' },
                     body: JSON.stringify(payload)
                 });
                 if (!response.ok) {
@@ -498,11 +579,14 @@
             const selectedDate = document.getElementById('dashboard-date').value;
             const period = document.getElementById('summary-period').value;
             let filteredForOverall;
-            if (period === 'day') { filteredForOverall = attendance.filter(rec => new Date(rec.timestamp).toDateString() === new Date(selectedDate).toDateString()); } 
-            else if (period === 'week') { const startOfWeek = new Date(selectedDate); startOfWeek.setDate(new Date(selectedDate).getDate() - new Date(selectedDate).getDay()); startOfWeek.setHours(0,0,0,0); const endOfWeek = new Date(startOfWeek); endOfWeek.setDate(startOfWeek.getDate() + 6); endOfWeek.setHours(23, 59, 59, 999);
-                filteredForOverall = attendance.filter(rec => rec.timestamp >= startOfWeek && rec.timestamp <= endOfWeek);
+            if (period === 'day') { filteredForOverall = attendance.filter(rec => new Date(rec.timestamp).toDateString() === new Date(selectedDate).toDateString());
+            } 
+            else if (period === 'week') { const startOfWeek = new Date(selectedDate);
+            startOfWeek.setDate(new Date(selectedDate).getDate() - new Date(selectedDate).getDay()); startOfWeek.setHours(0,0,0,0); const endOfWeek = new Date(startOfWeek); endOfWeek.setDate(startOfWeek.getDate() + 6); endOfWeek.setHours(23, 59, 59, 999);
+            filteredForOverall = attendance.filter(rec => rec.timestamp >= startOfWeek && rec.timestamp <= endOfWeek);
             }
-            else { filteredForOverall = attendance.filter(rec => rec.timestamp.getFullYear() === new Date(selectedDate).getFullYear() && rec.timestamp.getMonth() === new Date(selectedDate).getMonth()); }
+            else { filteredForOverall = attendance.filter(rec => rec.timestamp.getFullYear() === new Date(selectedDate).getFullYear() && rec.timestamp.getMonth() === new Date(selectedDate).getMonth());
+            }
             
             let presentCount = 0, absentOrLeaveCount = 0;
             const uniqueDailyChecks = new Set();
@@ -528,14 +612,22 @@
                      response.data.forEach(item => {
                         const row = `
                             <tr class="dark:border-gray-700">
-                                <td class="p-2 font-medium">${item.subject}</td>
-                                <td class="p-2 text-center">${item.present}</td>
-                                <td class="p-2 text-center">${item.absentOrLeave}</td>
+                                <td class="p-2">
+                                    <div class="flex items-center gap-3">
+                                        <img src="${item.teacherImage || 'https://placehold.co/40x40/e2e8f0/475569?text=?'}" class="w-8 h-8 rounded-full object-cover">
+                                        <div>
+                                            <p class="font-medium">${item.subject}</p>
+                                            <p class="text-xs text-gray-500 dark:text-gray-400">${item.teacherName}</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="p-2 text-center text-green-600 dark:text-green-400 font-semibold">${item.present}</td>
+                                <td class="p-2 text-center text-red-600 dark:text-red-400 font-semibold">${item.absentOrLeave}</td>
                             </tr>`;
                         tableBody.innerHTML += row;
                      });
                 } else {
-                     tableBody.innerHTML = '<tr><td colspan="3" class="text-center p-4 text-gray-500">ไม่มีข้อมูลการเช็คชื่อในวันนี้</td></tr>';
+                     tableBody.innerHTML = '<tr><td colspan="3" class="text-center p-4 text-gray-500">ไม่มีข้อมูลการเช็คชื่อ</td></tr>';
                 }
             } catch(error) {
                 console.error("Error fetching dashboard summary:", error);
@@ -556,14 +648,21 @@
         }
         
         // --- ATTENDANCE PROCESS ---
-        async function loadSubjects() {
+        async function loadSubjectsForDropdown() {
             try {
-                const response = await apiCall({ action: 'getSubjects' });
+                if (subjects.length === 0) {
+                    const response = await apiCall({ action: 'getSubjects' });
+                    if (response.success) {
+                        subjects = response.data;
+                    }
+                }
+                
                 const subjectSelect = document.getElementById('subject-select');
                 subjectSelect.innerHTML = '<option value="">-- กรุณาเลือกรายวิชา --</option>';
-                if (response.success && response.data.length > 0) {
-                    response.data.forEach(subject => {
-                        const option = new Option(subject, subject);
+
+                if (subjects.length > 0) {
+                    subjects.forEach(subject => {
+                        const option = new Option(subject.subjectname, subject.subjectname);
                         subjectSelect.appendChild(option);
                     });
                 }
@@ -576,10 +675,11 @@
                 console.error('Error loading subjects:', error);
             }
         }
+
         function startScanning() {
             const selectedSubject = document.getElementById('subject-select').value;
             if (!selectedSubject) { alert('กรุณาเลือกรายวิชาก่อน'); return; }
-            currentSubject = selectedSubject; 
+            currentSubject = selectedSubject;
             document.getElementById('current-subject-display').innerText = `| วิชา: ${currentSubject}`;
             checkedInToday.clear();
             document.getElementById('start-scan-section').classList.add('hidden');
@@ -625,14 +725,14 @@
                     const item = document.createElement('div');
                     item.className = 'flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg';
                     item.id = `student-row-${student.studentid}`;
-                    
+                                      
                     const studentInfoHtml = `
                         <div class="flex items-center gap-3">
                             <img src="${student.imagedatabase64 || 'https://placehold.co/40x40'}" class="w-10 h-10 rounded-full object-cover">
                             <div>
                                 <p class="font-medium">${student.name}</p>
                                 <p class="text-sm text-gray-500">${student.studentid}</p>
-                            </div>
+                               </div>
                         </div>`;
 
                     item.innerHTML = studentInfoHtml + `<div class="flex items-center gap-2" id="status-container-${student.studentid}"></div>`;
@@ -658,7 +758,7 @@
                     <p class="font-semibold text-sm ${statusColor}">${existingRecord.status}</p>
                     <button onclick="editStatus('${studentId}')" class="text-blue-600 hover:text-blue-800 text-sm p-1">
                         <i data-lucide="edit-2" class="w-4 h-4"></i>
-                    </button>`;
+                     </button>`;
             } else {
                 const buttonBaseClasses = "px-3 py-1 text-sm rounded-full transition-colors duration-200";
                 const defaultButtonClasses = "bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600";
@@ -666,7 +766,7 @@
                     <div class="flex gap-2 items-center" id="status-buttons-${studentId}">
                         <button onclick="markStatus('${studentId}', 'มาเรียน')" class="${buttonBaseClasses} ${defaultButtonClasses}">มาเรียน</button>
                         <button onclick="markStatus('${studentId}', 'ขาด')" class="${buttonBaseClasses} ${defaultButtonClasses}">ขาด</button>
-                        <button onclick="markStatus('${studentId}', 'ลา')" class="${buttonBaseClasses} ${defaultButtonClasses}">ลา</button>
+                         <button onclick="markStatus('${studentId}', 'ลา')" class="${buttonBaseClasses} ${defaultButtonClasses}">ลา</button>
                     </div>`;
             }
             lucide.createIcons();
@@ -683,10 +783,9 @@
                     <button onclick="markStatus('${studentId}', 'ขาด')" class="${buttonBaseClasses} ${defaultButtonClasses}">ขาด</button>
                     <button onclick="markStatus('${studentId}', 'ลา')" class="${buttonBaseClasses} ${defaultButtonClasses}">ลา</button>
                 </div>`;
-            
             const existingRecord = checkedInToday.get(String(studentId));
             if (existingRecord) {
-                markStatus(studentId, existingRecord.status, false); 
+                markStatus(studentId, existingRecord.status, false);
             }
         }
         function stopScanning(showStudentList = true) {
@@ -741,38 +840,38 @@
                 if (status === 'มาเรียน') selectedButton = allButtons[0];
                 else if (status === 'ขาด') selectedButton = allButtons[1];
                 else if (status === 'ลา') selectedButton = allButtons[2];
-                if (selectedButton) { selectedButton.classList.remove(...defaultClasses); selectedButton.classList.add(...selectedClasses); }
+                if (selectedButton) { selectedButton.classList.remove(...defaultClasses); selectedButton.classList.add(...selectedClasses);
+                }
             }
         }
         async function finishAttendance() {
             students.forEach(student => {
                 if (!checkedInToday.has(String(student.studentid))) {
                     const absentRecord = {
-                        id: student.studentid, name: student.name, class: student.class,
+                         id: student.studentid, name: student.name, class: student.class,
                         timestamp: new Date().toISOString(),
                         location: currentGeoLocation ? `${currentGeoLocation.lat},${currentGeoLocation.lng}` : 'N/A',
                         status: 'ขาด', subject: currentSubject
-                    };
+                                     };
                     checkedInToday.set(String(student.studentid), absentRecord);
                 }
             });
-
             const recordsToSave = Array.from(checkedInToday.values());
 
             if (recordsToSave.length > 0) {
                  try {
                     const response = await apiCall({ 
                         action: 'recordAttendanceBulk', 
-                        data: {
+                         data: {
                             records: recordsToSave,
                             subject: currentSubject,
                             date: new Date().toISOString().split('T')[0]
-                        } 
+                               } 
                     });
                     alert(response.success ? 'บันทึกข้อมูลการเช็คชื่อทั้งหมดเรียบร้อยแล้ว' : 'เกิดข้อผิดพลาดในการบันทึกข้อมูล: ' + response.error);
                  } catch(err) {
                     alert('เกิดข้อผิดพลาดรุนแรงในการบันทึกข้อมูล');
-                 }
+                }
             }
 
             checkedInToday.clear();
@@ -800,13 +899,13 @@
                         if (!isScanning) return;
                         const detections = await faceapi.detectAllFaces(video).withFaceLandmarks().withFaceDescriptors();
                         const resizedDetections = faceapi.resizeResults(detections, displaySize);
-                        overlay.getContext('2d').clearRect(0, 0, overlay.width, overlay.height);
+                         overlay.getContext('2d').clearRect(0, 0, overlay.width, overlay.height);
                         if (faceMatcher) {
                             resizedDetections.forEach(d => {
-                                const bestMatch = faceMatcher.findBestMatch(d.descriptor);
+                                 const bestMatch = faceMatcher.findBestMatch(d.descriptor);
                                 new faceapi.draw.DrawBox(d.detection.box, { label: bestMatch.toString() }).draw(overlay);
                                 if (bestMatch.label !== 'unknown') {
-                                    const student = students.find(s => s.name === bestMatch.label);
+                                     const student = students.find(s => s.name === bestMatch.label);
                                     if (student && !checkedInToday.has(String(student.studentid))) handleRecognition(student);
                                 }
                             });
@@ -826,13 +925,13 @@
                     const labeledFaceDescriptors = await Promise.all(students.map(async (student) => {
                         if (student.imagedatabase64 && student.imagedatabase64.startsWith('data:image')) {
                             try {
-                                const img = await faceapi.fetchImage(student.imagedatabase64);
+                                 const img = await faceapi.fetchImage(student.imagedatabase64);
                                 const detections = await faceapi.detectSingleFace(img).withFaceLandmarks().withFaceDescriptor();
                                 if (detections) return new faceapi.LabeledFaceDescriptors(student.name, [detections.descriptor]);
-                            } catch (e) { console.error(`Could not process image for ${student.name}`, e); }
+                                 } catch (e) { console.error(`Could not process image for ${student.name}`, e); }
                         }
                         return null;
-                    }));
+                     }));
                     const validDescriptors = labeledFaceDescriptors.filter(Boolean);
                     faceMatcher = validDescriptors.length > 0 ? new faceapi.FaceMatcher(validDescriptors, 0.6) : null;
                 } else {
@@ -856,8 +955,8 @@
             }
         }
         
-        // --- STUDENT MANAGEMENT ---
-        function handleImageUpload(event) {
+        // --- STUDENT & SUBJECT MANAGEMENT ---
+        function handleImageUpload(event, previewId, dataId) {
             const file = event.target.files[0];
             if (!file) return;
             const reader = new FileReader();
@@ -869,13 +968,15 @@
                     canvas.width = MAX_WIDTH; canvas.height = img.height * scaleSize;
                     canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
                     const dataUrl = canvas.toDataURL('image/jpeg');
-                    document.getElementById('image-preview').src = dataUrl;
-                    document.getElementById('student-image-data').value = dataUrl;
+                    document.getElementById(previewId).src = dataUrl;
+                    document.getElementById(dataId).value = dataUrl;
                 };
                 img.src = e.target.result;
             };
             reader.readAsDataURL(file);
         }
+
+        // Student Modal
         function openStudentModal(student = null) {
             document.getElementById('student-form').reset();
             document.getElementById('image-preview').src = 'https://placehold.co/400x300/e2e8f0/475569?text=Image';
@@ -899,6 +1000,7 @@
         }
         async function loadStudentDataForTable() {
             try {
+                students = []; 
                 await loadStudentData();
                 studentSortOrder = 'desc';
                 sortStudentTable();
@@ -915,26 +1017,25 @@
                 tableBody.innerHTML = '<tr><td colspan="4" class="text-center p-4 text-gray-500">ยังไม่มีข้อมูลนักเรียน</td></tr>';
                 return;
             }
-            
             students.forEach(student => {
                 const row = document.createElement('tr');
                 row.innerHTML = `<td class="p-3">${student.studentid}</td><td class="p-3">${student.name}</td><td class="p-3">${student.class}</td><td class="p-3 text-center"></td>`;
-                
-                const actionsCell = row.cells[3];
+                 const actionsCell = row.cells[3];
                 const editButton = document.createElement('button');
-                editButton.className = 'text-blue-600 p-1';
-                editButton.textContent = 'แก้ไข';
+                editButton.className = 'text-blue-600 p-1 hover:underline';
+                editButton.innerHTML = `<i data-lucide="edit" class="inline-block w-4 h-4 mr-1"></i>แก้ไข`;
                 editButton.onclick = () => openStudentModal(students.find(s => s.rowIndex === student.rowIndex));
                 
                 const deleteButton = document.createElement('button');
-                deleteButton.className = 'text-red-600 p-1 ml-2';
-                deleteButton.textContent = 'ลบ';
+                deleteButton.className = 'text-red-600 p-1 ml-2 hover:underline';
+                deleteButton.innerHTML = `<i data-lucide="trash-2" class="inline-block w-4 h-4 mr-1"></i>ลบ`;
                 deleteButton.onclick = () => deleteStudent(student.rowIndex);
 
                 actionsCell.appendChild(editButton);
                 actionsCell.appendChild(deleteButton);
                 tableBody.appendChild(row);
             });
+            lucide.createIcons();
         }
         function sortStudentTable() {
             studentSortOrder = studentSortOrder === 'asc' ? 'desc' : 'asc';
@@ -943,7 +1044,7 @@
                 const idB = b.studentid;
                 if (studentSortOrder === 'asc') {
                     return idA.localeCompare(idB, undefined, {numeric: true});
-                } else {
+                 } else {
                     return idB.localeCompare(idA, undefined, {numeric: true});
                 }
             });
@@ -989,7 +1090,128 @@
                 }
             }
         }
+
+        // [UPDATED] Subject Modal Functions (without SubjectID)
+        function openSubjectModal(subject = null) {
+            document.getElementById('subject-form').reset();
+            document.getElementById('image-preview-subject').src = 'https://placehold.co/400x300/e2e8f0/475569?text=Image';
+            document.getElementById('subject-image-data').value = '';
+
+            if (subject) {
+                document.getElementById('modal-title-subject').innerText = 'แก้ไขข้อมูลรายวิชา';
+                document.getElementById('subject-row-index').value = subject.rowIndex;
+                document.getElementById('subject-name').value = subject.subjectname;
+                document.getElementById('teacher-name').value = subject.teachername;
+                document.getElementById('subject-image-data').value = subject.teacherimage || '';
+                if (subject.teacherimage) {
+                    document.getElementById('image-preview-subject').src = subject.teacherimage;
+                }
+            } else {
+                document.getElementById('modal-title-subject').innerText = 'เพิ่มข้อมูลรายวิชา';
+            }
+            document.getElementById('subject-modal').classList.remove('hidden');
+        }
+
+        function closeSubjectModal() {
+            document.getElementById('subject-modal').classList.add('hidden');
+        }
+
+        async function loadSubjectsForTable() {
+            try {
+                subjects = []; // Clear cache
+                const response = await apiCall({ action: 'getSubjects' });
+                if (response.success) {
+                    subjects = response.data;
+                    renderSubjectTable();
+                } else {
+                    throw new Error(response.error);
+                }
+            } catch(err) {
+                console.error('Error loading subjects for table:', err);
+                subjects = [];
+                renderSubjectTable();
+            }
+        }
         
+        function renderSubjectTable() {
+            const tableBody = document.getElementById('subject-table-body');
+            tableBody.innerHTML = '';
+            if (subjects.length === 0) {
+                tableBody.innerHTML = '<tr><td colspan="4" class="text-center p-4 text-gray-500">ยังไม่มีข้อมูลรายวิชา</td></tr>';
+                return;
+            }
+            subjects.forEach(subject => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td class="p-2"><img src="${subject.teacherimage || 'https://placehold.co/40x40/e2e8f0/475569?text=?'}" class="w-10 h-10 rounded-full object-cover"></td>
+                    <td class="p-3">${subject.subjectname}</td>
+                    <td class="p-3">${subject.teachername}</td>
+                    <td class="p-3 text-center"></td>`;
+                
+                const actionsCell = row.cells[3];
+                const editButton = document.createElement('button');
+                editButton.className = 'text-blue-600 p-1 hover:underline';
+                editButton.innerHTML = `<i data-lucide="edit" class="inline-block w-4 h-4 mr-1"></i>แก้ไข`;
+                editButton.onclick = () => openSubjectModal(subject);
+                
+                const deleteButton = document.createElement('button');
+                deleteButton.className = 'text-red-600 p-1 ml-2 hover:underline';
+                deleteButton.innerHTML = `<i data-lucide="trash-2" class="inline-block w-4 h-4 mr-1"></i>ลบ`;
+                deleteButton.onclick = () => deleteSubject(subject.rowIndex);
+
+                actionsCell.appendChild(editButton);
+                actionsCell.appendChild(deleteButton);
+                tableBody.appendChild(row);
+            });
+            lucide.createIcons();
+        }
+
+        async function handleSubjectFormSubmit(event) {
+            event.preventDefault();
+            const submitBtn = document.getElementById('form-submit-btn-subject');
+            submitBtn.disabled = true; submitBtn.innerText = 'กำลังบันทึก...';
+            
+            const subjectData = {
+                rowIndex: document.getElementById('subject-row-index').value,
+                name: document.getElementById('subject-name').value,
+                teacherName: document.getElementById('teacher-name').value,
+                imageData: document.getElementById('subject-image-data').value
+            };
+            
+            const action = subjectData.rowIndex ? 'updateSubject' : 'addSubject';
+            
+            try {
+                const response = await apiCall({ action: action, data: subjectData });
+                if (response.success) {
+                    closeSubjectModal();
+                    loadSubjectsForTable();
+                } else {
+                    alert('Error: ' + (response.error || 'Unknown error'));
+                }
+            } catch (err) {
+                 alert('Error: ' + err.message);
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerText = 'บันทึก';
+            }
+        }
+
+        async function deleteSubject(rowIndex) {
+            if (confirm('คุณแน่ใจหรือไม่ว่าต้องการลบข้อมูลรายวิชานี้?')) {
+                try {
+                     const response = await apiCall({ action: 'deleteSubject', data: { rowIndex } });
+                    if (response.success) {
+                        loadSubjectsForTable();
+                    } else {
+                        alert('Error: ' + (response.error || 'Unknown error'));
+                    }
+                } catch(err) {
+                    alert('Error: ' + err.message);
+                }
+            }
+        }
+
+
         // --- REPORTS ---
         function loadDataForReportFilters() {
             const classFilter = document.getElementById('report-class-filter');
@@ -1030,16 +1252,16 @@
                     summary.forEach(item => {
                         const row = `<tr>
                                 <td class="p-3 text-left">${item.class}</td>
-                                <td class="p-3 text-left">${item.subject}</td>
+                                     <td class="p-3 text-left">${item.subject}</td>
                                 <td class="p-3 text-center">${item.totalStudents}</td>
                                 <td class="p-3 text-center">${item.present}</td>
-                                <td class="p-3 text-center">${item.absent}</td>
+                                     <td class="p-3 text-center">${item.absent}</td>
                                 <td class="p-3 text-center">${item.leave}</td>
                                 <td class="p-3 text-center font-bold">${item.totalPresent}</td>
-                                <td class="p-3 text-center font-bold">${item.attendancePercent}%</td>
+                                         <td class="p-3 text-center font-bold">${item.attendancePercent}%</td>
                             </tr>`;
                         reportTableBody.innerHTML += row;
-                    });
+                     });
                     linePreview.innerHTML = lineData.map(d => `<div>${d.date} | ${d.class} | ${d.subject} | ${d.id} ${d.name} | ${d.status}</div>`).join('') || '<p class="text-gray-500">ไม่มีนักเรียนที่ขาดหรือลา</p>';
                     document.getElementById('report-title').innerText = `ผลลัพธ์สำหรับวันที่ ${new Date(reportData.dateFilter).toLocaleDateString('th-TH')}`;
                     sendLineBtn.disabled = false;
@@ -1093,7 +1315,6 @@
                 period: document.getElementById('summary-period-filter').value,
                 date: `${dateValue}-01`,
             };
-
             try {
                 const response = await apiCall({ action: 'getAttendanceSummaryReport', data: filters });
                 if (response.success) {
@@ -1111,10 +1332,11 @@
                         const row = document.createElement('tr');
                         row.className = 'summary-row cursor-pointer';
                         row.onclick = () => showStudentDetail(item.class, item.subject);
-                        row.innerHTML = `
+      
+                         row.innerHTML = `
                             <td class="p-3">${item.class}</td>
                             <td class="p-3 font-medium">${item.subject}</td>
-                            <td class="p-3 text-center">${item.totalStudents}</td>
+                             <td class="p-3 text-center">${item.totalStudents}</td>
                             <td class="p-3 text-center text-green-600">${item.present}</td>
                             <td class="p-3 text-center text-red-600">${item.absent}</td>
                             <td class="p-3 text-center text-yellow-600">${item.leave}</td>
@@ -1135,30 +1357,28 @@
             
             document.getElementById('student-detail-title').innerText = `รายชื่อนักเรียนและคะแนน - ห้อง ${className} | วิชา: ${subjectName}`;
             detailTableBody.innerHTML = '';
-            
             const studentsInClass = summaryReportData.allStudents.filter(s => s.class === className);
             const attendanceDetails = summaryReportData.details.filter(d => d.class === className && d.subject === subjectName);
-
             studentsInClass.forEach(student => {
                 const studentRecords = attendanceDetails.filter(d => d.studentid == student.studentid);
                 const presentCount = studentRecords.filter(r => r.status === 'มาเรียน').length;
                 const absentCount = studentRecords.filter(r => r.status === 'ขาด').length;
                 const leaveCount = studentRecords.filter(r => r.status === 'ลา').length;
-                
-                const scoreKey = `${student.studentid}|${subjectName}`;
+      
+                           const scoreKey = `${student.studentid}|${subjectName}`;
                 const currentScore = summaryReportData.scores[scoreKey] || '';
 
                 const row = document.createElement('tr');
                 row.innerHTML = `
-                    <td class="p-2">${student.studentid}</td>
+                     <td class="p-2">${student.studentid}</td>
                     <td class="p-2">${student.name}</td>
                     <td class="p-2 text-center">${presentCount}</td>
                     <td class="p-2 text-center">${absentCount}</td>
                     <td class="p-2 text-center">${leaveCount}</td>
-                    <td class="p-2 text-center">
+                     <td class="p-2 text-center">
                         <input type="number" class="w-20 text-center border rounded p-1 bg-white dark:bg-gray-800"
                                data-studentid="${student.studentid}"
-                               data-class="${className}"
+                                data-class="${className}"
                                data-subject="${subjectName}"
                                value="${currentScore}">
                     </td>`;
@@ -1177,10 +1397,9 @@
                     input.dataset.studentid,
                     input.dataset.class,
                     input.dataset.subject,
-                    input.value
+                     input.value
                 ]);
             });
-
             if (scoresToSave.length > 0) {
                 try {
                     const saveBtn = event.target.closest('button');
@@ -1211,16 +1430,15 @@
                 const totalAttendance = item.present + item.absent + item.leave;
                 const attendancePercent = totalAttendance > 0 ? ((item.present / totalAttendance) * 100).toFixed(2) : "0.00";
                 return {
-                    'ชั้น': item.class,
+                     'ชั้น': item.class,
                     'รายวิชา': item.subject,
                     'นักเรียนทั้งหมด': item.totalStudents,
                     'มา': item.present,
-                    'ขาด': item.absent,
+                     'ขาด': item.absent,
                     'ลา': item.leave,
                     '% การเข้าเรียน': attendancePercent
                 };
             });
-
             const worksheet = XLSX.utils.json_to_sheet(dataToExport);
             const workbook = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(workbook, worksheet, "สรุปการเข้าเรียน");
@@ -1233,7 +1451,7 @@
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(
                     pos => { currentGeoLocation = { lat: pos.coords.latitude, lng: pos.coords.longitude }; },
-                    () => { console.warn('Could not get location.'); }
+                     () => { console.warn('Could not get location.'); }
                 );
             }
         }
