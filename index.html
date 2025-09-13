@@ -38,8 +38,9 @@
             <div class="flex items-center gap-2">
                 <nav class="flex items-center flex-wrap justify-center space-x-1 md:space-x-2 bg-gray-200 dark:bg-gray-700 p-1 rounded-lg">
                     <button onclick="switchTab('dashboard')" id="tab-dashboard" class="px-3 py-1.5 text-sm font-medium rounded-md">Dashboard</button>
+                    <button onclick="switchTab('students')" id="tab-students" class="px-3 py-1.5 text-sm font-medium rounded-md">นักเรียน</button>
                     <button onclick="switchTab('attendance')" id="tab-attendance" class="px-3 py-1.5 text-sm font-medium rounded-md">เช็คชื่อ</button>
-                    <button onclick="switchTab('manage')" id="tab-manage" class="px-3 py-1.5 text-sm font-medium rounded-md">จัดการข้อมูล</button>
+                    <button onclick="switchTab('manage')" id="tab-manage" class="px-3 py-1.5 text-sm font-medium rounded-md">จัดการรายวิชา</button>
                     <button onclick="switchTab('report')" id="tab-report" class="px-3 py-1.5 text-sm font-medium rounded-md">รายงาน</button>
                     <button onclick="switchTab('summary')" id="tab-summary" class="px-3 py-1.5 text-sm font-medium rounded-md">สรุปผล</button>
                 </nav>
@@ -96,6 +97,31 @@
                     <h3 class="font-semibold mb-4">รายชื่อนักเรียนในระบบ</h3>
                      <div id="student-roster-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 max-h-[60vh] overflow-y-auto custom-scrollbar pr-2"></div>
                      <div id="roster-loading" class="text-center py-8"><div class="loader w-12 h-12 rounded-full border-4 border-gray-200 dark:border-gray-700 mx-auto"></div><p class="mt-4 text-gray-600 dark:text-gray-400">กำลังโหลดข้อมูลนักเรียน...</p></div>
+                </div>
+            </div>
+
+            <div id="content-students" class="hidden">
+                 <div class="bg-white dark:bg-gray-800 p-4 sm:p-6 rounded-lg shadow-md">
+                    <div class="flex flex-col sm:flex-row justify-between items-center mb-4 gap-4">
+                        <h2 class="text-lg font-semibold text-gray-700 dark:text-gray-300">จัดการข้อมูลนักเรียน</h2>
+                        <button onclick="openStudentModal()" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 flex items-center space-x-2 w-full sm:w-auto justify-center">
+                            <i data-lucide="user-plus"></i><span>เพิ่มนักเรียน</span>
+                        </button>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left min-w-[700px]">
+                            <thead class="bg-gray-50 dark:bg-gray-700/50">
+                                <tr>
+                                    <th class="p-3">รูป</th>
+                                    <th id="student-page-id-header" onclick="sortStudentTable(true)" class="p-3 sortable-header">รหัสนักเรียน <i data-lucide="arrow-down-up" class="inline-block w-4 h-4"></i></th>
+                                    <th class="p-3">ชื่อ-สกุล</th>
+                                    <th class="p-3">ชั้นเรียน</th>
+                                    <th class="p-3 text-center">จัดการ</th>
+                                </tr>
+                            </thead>
+                            <tbody id="students-page-table-body" class="divide-y divide-gray-200 dark:divide-gray-700"></tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
 
@@ -160,28 +186,6 @@
             </div>
 
             <div id="content-manage" class="hidden space-y-6">
-                <div class="bg-white dark:bg-gray-800 p-4 sm:p-6 rounded-lg shadow-md">
-                    <div class="flex flex-col sm:flex-row justify-between items-center mb-4 gap-4">
-                        <h2 class="text-lg font-semibold text-gray-700 dark:text-gray-300">จัดการข้อมูลนักเรียน</h2>
-                        <button onclick="openStudentModal()" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 flex items-center space-x-2 w-full sm:w-auto justify-center">
-                            <i data-lucide="user-plus"></i><span>เพิ่มนักเรียน</span>
-                        </button>
-                    </div>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left min-w-[600px]">
-                            <thead class="bg-gray-50 dark:bg-gray-700/50">
-                                <tr>
-                                    <th id="student-id-header" onclick="sortStudentTable()" class="p-3 sortable-header">รหัสนักเรียน <i data-lucide="arrow-down-up" class="inline-block w-4 h-4"></i></th>
-                                    <th class="p-3">ชื่อ-สกุล</th>
-                                    <th class="p-3">ชั้นเรียน</th>
-                                    <th class="p-3 text-center">จัดการ</th>
-                                </tr>
-                            </thead>
-                            <tbody id="student-table-body" class="divide-y divide-gray-200 dark:divide-gray-700"></tbody>
-                        </table>
-                    </div>
-                </div>
-
                 <div class="bg-white dark:bg-gray-800 p-4 sm:p-6 rounded-lg shadow-md">
                     <div class="flex flex-col sm:flex-row justify-between items-center mb-4 gap-4">
                         <h2 class="text-lg font-semibold text-gray-700 dark:text-gray-300">จัดการข้อมูลรายวิชา</h2>
@@ -409,6 +413,7 @@
         let lastReportDataForPresentLine = [];
         let studentSortOrder = 'asc';
         let summaryReportData = {}; 
+        let activeTab = 'dashboard'; // [NEW] Track active tab
 
         // --- THEME ---
         function applyTheme(theme) {
@@ -481,8 +486,9 @@
         
         // --- UI & NAVIGATION ---
         async function switchTab(tabName) {
+            activeTab = tabName; // [NEW] Update active tab tracker
             stopScanning(false);
-            ['dashboard', 'attendance', 'manage', 'report', 'summary'].forEach(name => {
+            ['dashboard', 'students', 'attendance', 'manage', 'report', 'summary'].forEach(name => {
                 const contentEl = document.getElementById(`content-${name}`);
                 const tabEl = document.getElementById(`tab-${name}`);
                 if (contentEl) contentEl.classList.add('hidden');
@@ -492,15 +498,16 @@
                 }
             });
             document.getElementById(`content-${tabName}`).classList.remove('hidden');
-            const activeTab = document.getElementById(`tab-${tabName}`);
-            activeTab.classList.add('bg-blue-600', 'text-white');
-            activeTab.classList.remove('text-gray-600', 'dark:text-gray-300');
+            const activeTabEl = document.getElementById(`tab-${tabName}`);
+            activeTabEl.classList.add('bg-blue-600', 'text-white');
+            activeTabEl.classList.remove('text-gray-600', 'dark:text-gray-300');
             
             if (tabName === 'dashboard') {
                 await loadStudentData();
                 await loadAttendanceDataForDashboard();
+            } else if (tabName === 'students') { // [NEW] Handle new students tab
+                await loadStudentDataForStudentsPage();
             } else if (tabName === 'manage') { 
-                await loadStudentDataForTable();
                 await loadSubjectsForTable();
             } else if (tabName === 'attendance') {
                 await loadStudentDataForRecognition();
@@ -540,9 +547,11 @@
             }
         }
         
-        async function loadStudentData() {
+        // [UPDATED] To accept forceRefresh parameter
+        async function loadStudentData(forceRefresh = false) {
             const rosterLoading = document.getElementById('roster-loading');
-            if (students.length > 0) return;
+            if (!forceRefresh && students.length > 0) return;
+
             try {
                 if (rosterLoading) rosterLoading.style.display = 'block';
                 const response = await apiCall({ action: 'getStudents' });
@@ -1074,35 +1083,40 @@
             document.getElementById('student-modal').classList.add('hidden');
         }
         
-        // [FIXED] This function no longer clears the students array.
-        async function loadStudentDataForTable() {
+        // [UPDATED] Function for the new Students page table
+        async function loadStudentDataForStudentsPage() {
             try {
-                // The `students = [];` line that caused the error has been removed.
-                await loadStudentData(); // Uses cached data if available, or fetches if not.
-                studentSortOrder = 'desc';
-                sortStudentTable();
+                await loadStudentData(true); // Force a refresh when visiting this page
+                sortStudentTable(true);
             } catch(err) {
                  console.error('Error loading students for table:', err);
                  students = [];
-                 renderStudentTable();
+                 renderStudentTableForStudentsPage();
             }
         }
     
-        function renderStudentTable() {
-            const tableBody = document.getElementById('student-table-body');
+        // [NEW] Renders the table on the dedicated Students page
+        function renderStudentTableForStudentsPage() {
+            const tableBody = document.getElementById('students-page-table-body');
             tableBody.innerHTML = '';
             if (students.length === 0) {
-                tableBody.innerHTML = '<tr><td colspan="4" class="text-center p-4 text-gray-500">ยังไม่มีข้อมูลนักเรียน</td></tr>';
+                tableBody.innerHTML = '<tr><td colspan="5" class="text-center p-4 text-gray-500">ยังไม่มีข้อมูลนักเรียน</td></tr>';
                 return;
             }
             students.forEach(student => {
                 const row = document.createElement('tr');
-                row.innerHTML = `<td class="p-3">${student.studentid}</td><td class="p-3">${student.name}</td><td class="p-3">${student.class}</td><td class="p-3 text-center"></td>`;
-                 const actionsCell = row.cells[3];
+                row.innerHTML = `
+                    <td class="p-2"><img src="${student.imagedatabase64 || 'https://placehold.co/40x40/e2e8f0/475569?text=?'}" class="w-10 h-10 rounded-full object-cover"></td>
+                    <td class="p-3">${student.studentid}</td>
+                    <td class="p-3">${student.name}</td>
+                    <td class="p-3">${student.class}</td>
+                    <td class="p-3 text-center"></td>`;
+                
+                 const actionsCell = row.cells[4];
                 const editButton = document.createElement('button');
                 editButton.className = 'text-blue-600 p-1 hover:underline';
                 editButton.innerHTML = `<i data-lucide="edit" class="inline-block w-4 h-4 mr-1"></i>แก้ไข`;
-                editButton.onclick = () => openStudentModal(students.find(s => s.rowIndex === student.rowIndex));
+                editButton.onclick = () => openStudentModal(student);
                 
                 const deleteButton = document.createElement('button');
                 deleteButton.className = 'text-red-600 p-1 ml-2 hover:underline';
@@ -1115,7 +1129,8 @@
             });
             lucide.createIcons();
         }
-        function sortStudentTable() {
+
+        function sortStudentTable(isStudentsPage = false) {
             studentSortOrder = studentSortOrder === 'asc' ? 'desc' : 'asc';
             students.sort((a, b) => {
                 const idA = a.studentid;
@@ -1126,7 +1141,10 @@
                     return idB.localeCompare(idA, undefined, {numeric: true});
                 }
             });
-            renderStudentTable();
+            // [UPDATED] Render the correct table based on the active tab
+            if (isStudentsPage || activeTab === 'students') {
+                renderStudentTableForStudentsPage();
+            }
         }
         async function handleStudentFormSubmit(event) {
             event.preventDefault();
@@ -1143,8 +1161,10 @@
                 const response = await apiCall({ action: action, data: studentData });
                 if (response.success) { 
                     closeStudentModal();
-                    students = []; // Force a full refresh after editing/adding
-                    await loadStudentDataForTable(); 
+                    // [UPDATED] Refresh the correct page after submit
+                    if (activeTab === 'students') {
+                        await loadStudentDataForStudentsPage();
+                    }
                 } else { 
                     alert('Error: ' + (response.error || 'Unknown error'));
                 }
@@ -1160,8 +1180,10 @@
                 try {
                      const response = await apiCall({ action: 'deleteStudent', data: { rowIndex } });
                     if (response.success) { 
-                        students = []; // Force a full refresh after deleting
-                        await loadStudentDataForTable(); 
+                        // [UPDATED] Refresh the correct page after delete
+                        if (activeTab === 'students') {
+                            await loadStudentDataForStudentsPage();
+                        }
                     } else { 
                         alert('Error: ' + (response.error || 'Unknown error'));
                     }
