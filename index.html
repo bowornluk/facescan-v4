@@ -614,7 +614,7 @@
             let presentCount = 0, absentOrLeaveCount = 0;
             const uniqueDailyChecks = new Set();
             filteredForOverall.forEach(rec => {
-                const key = `${rec.timestamp.toDateString()}-${rec.id}-${rec.subject}`;
+                const key = `${rec.timestamp.toDateString()}-${rec.studentid}-${rec.subject}`;
                 if (uniqueDailyChecks.has(key)) return;
                 if (rec.status === 'มาเรียน') {
                     presentCount++;
@@ -1223,6 +1223,7 @@
             }
         }
         
+        // Generic subject loader
         async function loadSubjects() {
             if (subjects.length > 0) return;
             try {
