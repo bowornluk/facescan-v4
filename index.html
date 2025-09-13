@@ -1143,7 +1143,7 @@
                 const response = await apiCall({ action: action, data: studentData });
                 if (response.success) { 
                     closeStudentModal();
-                    await loadStudentDataForTable(); 
+                    await loadStudentDataForTable(); // Use await to ensure data is reloaded
                 } else { 
                     alert('Error: ' + (response.error || 'Unknown error'));
                 }
@@ -1159,7 +1159,7 @@
                 try {
                      const response = await apiCall({ action: 'deleteStudent', data: { rowIndex } });
                     if (response.success) { 
-                        await loadStudentDataForTable(); 
+                        await loadStudentDataForTable(); // Use await
                     } else { 
                         alert('Error: ' + (response.error || 'Unknown error'));
                     }
