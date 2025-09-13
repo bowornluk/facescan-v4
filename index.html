@@ -1073,9 +1073,12 @@
         function closeStudentModal() { 
             document.getElementById('student-modal').classList.add('hidden');
         }
+        
+        // [FIXED] This function no longer clears the students array, fixing the bug.
         async function loadStudentDataForTable() {
             try {
-                await loadStudentData();
+                // The `students = [];` line that caused the error has been removed.
+                await loadStudentData(); // This will use cached data if available, or fetch if not.
                 studentSortOrder = 'desc';
                 sortStudentTable();
             } catch(err) {
@@ -1084,6 +1087,7 @@
                  renderStudentTable();
             }
         }
+
         function renderStudentTable() {
             const tableBody = document.getElementById('student-table-body');
             tableBody.innerHTML = '';
@@ -1139,7 +1143,7 @@
                 const response = await apiCall({ action: action, data: studentData });
                 if (response.success) { 
                     closeStudentModal();
-                    await loadStudentDataForTable(); // Use await to ensure data is reloaded
+                    await loadStudentDataForTable(); 
                 } else { 
                     alert('Error: ' + (response.error || 'Unknown error'));
                 }
@@ -1155,7 +1159,7 @@
                 try {
                      const response = await apiCall({ action: 'deleteStudent', data: { rowIndex } });
                     if (response.success) { 
-                        await loadStudentDataForTable(); // Use await
+                        await loadStudentDataForTable(); 
                     } else { 
                         alert('Error: ' + (response.error || 'Unknown error'));
                     }
@@ -1257,7 +1261,7 @@
                 const response = await apiCall({ action: action, data: subjectData });
                 if (response.success) {
                     closeSubjectModal();
-                    await loadSubjectsForTable(); // Use await
+                    await loadSubjectsForTable(); 
                 } else {
                     alert('Error: ' + (response.error || 'Unknown error'));
                 }
@@ -1274,7 +1278,7 @@
                 try {
                      const response = await apiCall({ action: 'deleteSubject', data: { rowIndex } });
                     if (response.success) {
-                        await loadSubjectsForTable(); // Use await
+                        await loadSubjectsForTable(); 
                     } else {
                         alert('Error: ' + (response.error || 'Unknown error'));
                     }
