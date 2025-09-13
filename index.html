@@ -393,7 +393,7 @@
                 </div>
                 <input type="hidden" id="subject-image-data">
                 <div class="flex justify-end space-x-4 mt-8">
-                    <button type="button" onclick="closeSubjectModal()" class="bg-gray-200 text-gray-700 dark:bg-gray-600 dark:text-gray-300 px-6 py-2 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-500">ยกเลิก</button>
+                    <button type="button" onclick="closeStudentModal()" class="bg-gray-200 text-gray-700 dark:bg-gray-600 dark:text-gray-300 px-6 py-2 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-500">ยกเลิก</button>
                     <button type="submit" id="form-submit-btn-subject" class="bg-purple-600 text-white px-6 py-2 rounded-lg hover:bg-purple-700">บันทึก</button>
                 </div>
             </form>
@@ -413,7 +413,7 @@
         let lastReportDataForPresentLine = [];
         let studentSortOrder = 'asc';
         let summaryReportData = {}; 
-        let activeTab = 'dashboard'; // Track active tab
+        let activeTab = 'dashboard'; // [NEW] Track active tab
 
         // --- THEME ---
         function applyTheme(theme) {
@@ -486,7 +486,7 @@
         
         // --- UI & NAVIGATION ---
         async function switchTab(tabName) {
-            activeTab = tabName; // Update active tab tracker
+            activeTab = tabName; // [NEW] Update active tab tracker
             stopScanning(false);
             ['dashboard', 'students', 'attendance', 'manage', 'report', 'summary'].forEach(name => {
                 const contentEl = document.getElementById(`content-${name}`);
@@ -505,7 +505,7 @@
             if (tabName === 'dashboard') {
                 await loadStudentData();
                 await loadAttendanceDataForDashboard();
-            } else if (tabName === 'students') { // Handle new students tab
+            } else if (tabName === 'students') { // [NEW] Handle new students tab
                 await loadStudentDataForStudentsPage();
             } else if (tabName === 'manage') { 
                 await loadSubjectsForTable();
@@ -1083,6 +1083,7 @@
             document.getElementById('student-modal').classList.add('hidden');
         }
         
+        // [UPDATED] Function for the new Students page table
         async function loadStudentDataForStudentsPage() {
             try {
                 await loadStudentData(true); // Force a refresh when visiting this page
@@ -1094,6 +1095,7 @@
             }
         }
     
+        // [NEW] Renders the table on the dedicated Students page
         function renderStudentTableForStudentsPage() {
             const tableBody = document.getElementById('students-page-table-body');
             tableBody.innerHTML = '';
@@ -1139,6 +1141,7 @@
                     return idB.localeCompare(idA, undefined, {numeric: true});
                 }
             });
+            // [UPDATED] Render the correct table based on the active tab
             if (isStudentsPage || activeTab === 'students') {
                 renderStudentTableForStudentsPage();
             }
@@ -1158,6 +1161,7 @@
                 const response = await apiCall({ action: action, data: studentData });
                 if (response.success) { 
                     closeStudentModal();
+                    // [UPDATED] Refresh the correct page after submit
                     if (activeTab === 'students') {
                         await loadStudentDataForStudentsPage();
                     }
@@ -1176,6 +1180,7 @@
                 try {
                      const response = await apiCall({ action: 'deleteStudent', data: { rowIndex } });
                     if (response.success) { 
+                        // [UPDATED] Refresh the correct page after delete
                         if (activeTab === 'students') {
                             await loadStudentDataForStudentsPage();
                         }
@@ -1214,27 +1219,18 @@
     
         async function loadSubjectsForTable() {
             try {
-                await loadSubjects(); // Re-use a generic subject loader
-                renderSubjectTable();
+                subjects = []; 
+                const response = await apiCall({ action: 'getSubjects' });
+                if (response.success) {
+                    subjects = response.data;
+                    renderSubjectTable();
+                } else {
+                    throw new Error(response.error);
+                }
             } catch(err) {
                 console.error('Error loading subjects for table:', err);
                 subjects = [];
                 renderSubjectTable();
-            }
-        }
-        
-        // Generic subject loader
-        async function loadSubjects() {
-            if (subjects.length > 0) return;
-            try {
-                 const response = await apiCall({ action: 'getSubjects' });
-                if (response.success) {
-                    subjects = response.data;
-                } else {
-                    throw new Error(response.error);
-                }
-            } catch (err) {
-                console.error("Error loading subjects", err);
             }
         }
         
@@ -1289,7 +1285,6 @@
                 const response = await apiCall({ action: action, data: subjectData });
                 if (response.success) {
                     closeSubjectModal();
-                    subjects = []; // Force refresh
                     await loadSubjectsForTable(); 
                 } else {
                     alert('Error: ' + (response.error || 'Unknown error'));
@@ -1307,7 +1302,6 @@
                 try {
                      const response = await apiCall({ action: 'deleteSubject', data: { rowIndex } });
                     if (response.success) {
-                        subjects = []; // Force refresh
                         await loadSubjectsForTable(); 
                     } else {
                         alert('Error: ' + (response.error || 'Unknown error'));
@@ -1616,3 +1610,4 @@
     </script>
 </body>
 </html>
+
