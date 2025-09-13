@@ -393,7 +393,7 @@
                 </div>
                 <input type="hidden" id="subject-image-data">
                 <div class="flex justify-end space-x-4 mt-8">
-                    <button type="button" onclick="closeSubjectModal()" class="bg-gray-200 text-gray-700 dark:bg-gray-600 dark:text-gray-300 px-6 py-2 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-500">ยกเลิก</button>
+                    <button type="button" onclick="closeStudentModal()" class="bg-gray-200 text-gray-700 dark:bg-gray-600 dark:text-gray-300 px-6 py-2 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-500">ยกเลิก</button>
                     <button type="submit" id="form-submit-btn-subject" class="bg-purple-600 text-white px-6 py-2 rounded-lg hover:bg-purple-700">บันทึก</button>
                 </div>
             </form>
@@ -583,7 +583,7 @@
                 students.forEach(student => {
                     const card = document.createElement('div');
                     card.className = 'bg-gray-50 dark:bg-gray-700/50 p-3 rounded-lg text-center';
-                     card.innerHTML = `<img src="${student.imagedatabase64 || 'https://placehold.co/150x150/e2e8f0/475569?text=No+Image'}" class="w-24 h-24 rounded-full object-cover mx-auto mb-2 border-2 border-gray-300 dark:border-gray-600"><p class="font-semibold text-sm truncate">${student.name}</p><p class="text-xs text-gray-500">${student.studentid}</p><p class="text-xs text-gray-500">${student.class}</p>`;
+                     card.innerHTML = `<img src="${student.imagedatabase64 || 'https://placehold.co/150x150/e2e8f0/475569?text=No+Image'}" class="w-24 h-24 rounded-full object-cover mx-auto mb-2 border-2 border-gray-300 dark:border-gray-600"><p class="font-semibold text-sm truncate">${student.name}</p><p class="text-xs text-gray-500">${student.id}</p><p class="text-xs text-gray-500">${student.class}</p>`;
                     rosterGrid.appendChild(card);
                 });
             }
@@ -809,21 +809,21 @@
                 students.forEach(student => {
                     const item = document.createElement('div');
                     item.className = 'flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg';
-                    item.id = `student-row-${student.studentid}`;
+                    item.id = `student-row-${student.id}`;
                                       
                     const studentInfoHtml = `
                         <div class="flex items-center gap-3">
                             <img src="${student.imagedatabase64 || 'https://placehold.co/40x40'}" class="w-10 h-10 rounded-full object-cover">
                             <div>
                                 <p class="font-medium">${student.name}</p>
-                                <p class="text-sm text-gray-500">${student.studentid}</p>
+                                <p class="text-sm text-gray-500">${student.id}</p>
                                </div>
                         </div>`;
 
-                    item.innerHTML = studentInfoHtml + `<div class="flex items-center gap-2" id="status-container-${student.studentid}"></div>`;
+                    item.innerHTML = studentInfoHtml + `<div class="flex items-center gap-2" id="status-container-${student.id}"></div>`;
                     studentList.appendChild(item);
                     
-                    renderStudentStatusControls(student.studentid);
+                    renderStudentStatusControls(student.id);
                 });
             }
         }
@@ -900,20 +900,20 @@
             }
         }
         function markStatus(studentId, status, rerender = true) {
-            const student = students.find(s => s.studentid == studentId);
+            const student = students.find(s => s.id == studentId);
             if (!student) return;
 
             const record = { 
-                id: student.studentid, name: student.name, class: student.class, 
+                id: student.id, name: student.name, class: student.class, 
                 timestamp: new Date().toISOString(), 
                 location: currentGeoLocation ? `${currentGeoLocation.lat},${currentGeoLocation.lng}` : 'N/A', 
                 status: status,
                 subject: currentSubject
             };
-            checkedInToday.set(String(student.studentid), record);
+            checkedInToday.set(String(student.id), record);
             
             if (rerender) {
-                renderStudentStatusControls(student.studentid);
+                renderStudentStatusControls(student.id);
             } else {
                 const buttonContainer = document.getElementById(`status-buttons-${studentId}`);
                 if (!buttonContainer) return;
@@ -931,14 +931,14 @@
         }
         async function finishAttendance() {
             students.forEach(student => {
-                if (!checkedInToday.has(String(student.studentid))) {
+                if (!checkedInToday.has(String(student.id))) {
                     const absentRecord = {
-                         id: student.studentid, name: student.name, class: student.class,
+                         id: student.id, name: student.name, class: student.class,
                         timestamp: new Date().toISOString(),
                         location: currentGeoLocation ? `${currentGeoLocation.lat},${currentGeoLocation.lng}` : 'N/A',
                         status: 'ขาด', subject: currentSubject
                                      };
-                    checkedInToday.set(String(student.studentid), absentRecord);
+                    checkedInToday.set(String(student.id), absentRecord);
                 }
             });
             const recordsToSave = Array.from(checkedInToday.values());
@@ -991,7 +991,7 @@
                                 new faceapi.draw.DrawBox(d.detection.box, { label: bestMatch.toString() }).draw(overlay);
                                 if (bestMatch.label !== 'unknown') {
                                      const student = students.find(s => s.name === bestMatch.label);
-                                    if (student && !checkedInToday.has(String(student.studentid))) handleRecognition(student);
+                                    if (student && !checkedInToday.has(String(student.id))) handleRecognition(student);
                                 }
                             });
                         }
@@ -1027,8 +1027,8 @@
             }
         }
         function handleRecognition(student) {
-            const record = { id: student.studentid, name: student.name, class: student.class, timestamp: new Date().toISOString(), location: currentGeoLocation ? `${currentGeoLocation.lat},${currentGeoLocation.lng}` : 'N/A', status: 'มาเรียน', subject: currentSubject };
-            checkedInToday.set(String(student.studentid), record);
+            const record = { id: student.id, name: student.name, class: student.class, timestamp: new Date().toISOString(), location: currentGeoLocation ? `${currentGeoLocation.lat},${currentGeoLocation.lng}` : 'N/A', status: 'มาเรียน', subject: currentSubject };
+            checkedInToday.set(String(student.id), record);
             
             const successOverlay = document.getElementById('scan-success-overlay');
             document.getElementById('scan-success-name').innerText = student.name;
@@ -1036,7 +1036,7 @@
             setTimeout(() => successOverlay.classList.add('hidden'), 2000);
             
             if (!document.getElementById('absence-management-section').classList.contains('hidden')) {
-                renderStudentStatusControls(student.studentid);
+                renderStudentStatusControls(student.id);
             }
         }
         
@@ -1069,7 +1069,7 @@
             if (student) {
                 document.getElementById('modal-title').innerText = 'แก้ไขข้อมูลนักเรียน';
                 document.getElementById('student-row-index').value = student.rowIndex;
-                document.getElementById('student-id').value = student.studentid;
+                document.getElementById('student-id').value = student.id;
                 document.getElementById('student-name').value = student.name;
                 document.getElementById('student-class').value = student.class;
                 document.getElementById('student-image-data').value = student.imagedatabase64 || '';
@@ -1085,10 +1085,10 @@
         
         async function loadStudentDataForStudentsPage() {
             try {
-                await loadStudentData(true); // Force a refresh when visiting this page
+                await loadStudentData(true); // Always force a refresh
                 sortStudentTable(true);
             } catch(err) {
-                 console.error('Error loading students for table:', err);
+                 console.error('Error loading students for Students page:', err);
                  students = [];
                  renderStudentTableForStudentsPage();
             }
@@ -1105,7 +1105,7 @@
                 const row = document.createElement('tr');
                 row.innerHTML = `
                     <td class="p-2"><img src="${student.imagedatabase64 || 'https://placehold.co/40x40/e2e8f0/475569?text=?'}" class="w-10 h-10 rounded-full object-cover"></td>
-                    <td class="p-3">${student.studentid}</td>
+                    <td class="p-3">${student.id}</td>
                     <td class="p-3">${student.name}</td>
                     <td class="p-3">${student.class}</td>
                     <td class="p-3 text-center"></td>`;
@@ -1131,14 +1131,15 @@
         function sortStudentTable(isStudentsPage = false) {
             studentSortOrder = studentSortOrder === 'asc' ? 'desc' : 'asc';
             students.sort((a, b) => {
-                const idA = a.studentid;
-                const idB = b.studentid;
+                const idA = a.id;
+                const idB = b.id;
                 if (studentSortOrder === 'asc') {
-                    return idA.localeCompare(idB, undefined, {numeric: true});
+                    return String(idA).localeCompare(String(idB), undefined, {numeric: true});
                  } else {
-                    return idB.localeCompare(idA, undefined, {numeric: true});
+                    return String(idB).localeCompare(String(idA), undefined, {numeric: true});
                 }
             });
+            
             if (isStudentsPage || activeTab === 'students') {
                 renderStudentTableForStudentsPage();
             }
@@ -1214,7 +1215,7 @@
     
         async function loadSubjectsForTable() {
             try {
-                await loadSubjects(); // Re-use a generic subject loader
+                await loadSubjects(); 
                 renderSubjectTable();
             } catch(err) {
                 console.error('Error loading subjects for table:', err);
@@ -1518,24 +1519,24 @@
             const studentsInClass = summaryReportData.allStudents.filter(s => s.class === className);
             const attendanceDetails = summaryReportData.details.filter(d => d.class === className && d.subject === subjectName);
             studentsInClass.forEach(student => {
-                const studentRecords = attendanceDetails.filter(d => d.studentid == student.studentid);
+                const studentRecords = attendanceDetails.filter(d => d.studentid == student.id);
                 const presentCount = studentRecords.filter(r => r.status === 'มาเรียน').length;
                 const absentCount = studentRecords.filter(r => r.status === 'ขาด').length;
                 const leaveCount = studentRecords.filter(r => r.status === 'ลา').length;
       
-                           const scoreKey = `${student.studentid}|${subjectName}`;
+                           const scoreKey = `${student.id}|${subjectName}`;
                 const currentScore = summaryReportData.scores[scoreKey] || '';
     
                 const row = document.createElement('tr');
                 row.innerHTML = `
-                     <td class="p-2">${student.studentid}</td>
+                     <td class="p-2">${student.id}</td>
                     <td class="p-2">${student.name}</td>
                     <td class="p-2 text-center">${presentCount}</td>
                     <td class="p-2 text-center">${absentCount}</td>
                     <td class="p-2 text-center">${leaveCount}</td>
                      <td class="p-2 text-center">
                         <input type="number" class="w-20 text-center border rounded p-1 bg-white dark:bg-gray-800"
-                               data-studentid="${student.studentid}"
+                               data-studentid="${student.id}"
                                 data-class="${className}"
                                data-subject="${subjectName}"
                                value="${currentScore}">
